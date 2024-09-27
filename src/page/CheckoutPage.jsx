@@ -50,7 +50,7 @@ function Checkout() {
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3 mb-4">
           <form className="bg-white px-5 py-12 mt-12">
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
@@ -409,6 +409,7 @@ function Checkout() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

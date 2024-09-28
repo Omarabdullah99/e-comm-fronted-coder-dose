@@ -67,6 +67,7 @@ const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
   return (
     <div>
+    <Navbar>
     <div className="bg-white">
       <div className="pt-6">
         <nav aria-label="Breadcrumb">
@@ -294,6 +295,7 @@ const ProductDetails = () => {
         </div>
       </div>
     </div>
+    </Navbar>
     </div>
   )
 }

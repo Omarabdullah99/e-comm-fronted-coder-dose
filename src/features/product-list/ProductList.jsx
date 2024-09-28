@@ -27,7 +27,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchAllProductsAsync,selectAllProducts} from './ProductSlice'
+import {fetchAllProductsAsync,selectAllProducts,fetchProductsByFiltersAsync} from './ProductSlice'
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -55,45 +55,128 @@ const ProductList = () => {
   }, [dispatch,products.length]);
  
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState([]); // <-- Use state to store filters
+
+  // ------------------get filter show dynamic start-----------------
+  const filters = [
+    {
+      id: "category",
+      name: "Category",
+      options: [
+       
+      {value: 'smartphones', label: 'Smartphones', checked: false},
+       
+      {value: 'laptops', label: 'Laptops', checked: false},
+       
+      {value: 'fragrances', label: 'Fragrances', checked: false},
+      
+      {value: 'skincare', label: 'Skincare', checked: false},
+       
+      {value: 'groceries', label: 'Groceries', checked: false},
+       
+      {value: 'home-decoration', label: 'Home-decoration', checked: false},
+       
+      {value: 'furniture', label: 'Furniture', checked: false},
+       
+      {value: 'tops', label: 'Tops', checked: false},
+       
+      {value: 'womens-dresses', label: 'Womens-dresses', checked: false},
+      ],
+      
+      },
+
+      {
+
+        id: "brand",
+        name: "Brand",
+        options:[
+        
+        {value: 'Apple', label: 'Apple', checked: false},
+         
+        {value: 'Samsung', label: 'Samsung', checked: false},
+         
+        {value: 'OPPO', label: 'OPPO', checked: false},
+         
+        {value: 'Huawei', label: 'Huawei', checked: false},
+        
+        {value: 'Microsoft Surface', label: 'Microsoft Surface', checked: false},
+        
+        {value: 'Infinix', label: 'Infinix', checked: false},
+        
+        {value: 'HP Pavilion', label: 'HP Pavilion', checked: false},
+        
+        {value: 'Impression of Acqua Di Gio', label: 'Impression of Acqua Di Gio', checked: false},
+        
+        {value: 'Royal_Mirage', label: 'Royal_Mirage', checked: false},
+        
+        {value: 'Fog Scent Xpressio', label: 'Fog Scent Xpressio', checked: false},
+        
+        {value: 'Al Munakh', label: 'Al Munakh', checked: false},
+        
+        {value: 'Lord - Al-Rehab', label: 'Lord - Al-Rehab', checked: false},
+       
+        {value: "L'Oreal Paris", label: "L'Oreal Paris", checked: false},
+       
+        {value: 'Hemani Tea', label: 'Hemani Tea', checked: false},
+       
+        {value: 'Dermive', label: 'Dermive', checked: false},
+        
+        {value: 'ROREC White Rice', label: 'ROREC White Rice', checked: false},
+       
+        {value: 'Fair & Clear', label: 'Fair & Clear', checked: false},
+       
+        {value: 'Saaf & Khaas', label: 'Saaf & Khaas', checked: false},
+       
+        {value: 'Bake Parlor Big', label: 'Bake Parlor Big', checked: false},
+        
+        {value: 'Baking Food Items', label: 'Baking Food Items', checked: false},
+       
+        {value: 'fauji', label: 'Fauji', checked: false},
+        {value: 'Dry Rose', label: 'Dry Rose', checked: false},
+        {value: 'Boho Decor', label: 'Boho Decor', checked: false},
+        {value: 'Flying Wooden', label: 'Flying Wooden', checked: false},
+        {value: 'LED Lights', label: 'LED Lights', checked: false},
+        {value: 'luxury palace', label: 'Luxury palace', checked: false}, 
+        {value: 'Golden', label: 'Golden', checked: false}, 
+        {value: 'Furniture Bed Set', label: 'Furniture Bed Set', checked: false},
+        {value: 'Ratttan Outdoor', label: 'Ratttan Outdoor', checked: false},
+        {value: 'Kitchen Shelf', label: 'Kitchen Shelf', checked: false},
+        {value: 'Multi Purpose', label: 'Multi Purpose', checked: false},
+       
+        {value: 'AmnaMart', label: 'AmnaMart', checked: false},
+       
+        {value: 'Professional Wear', label: 'Professional Wear', checked: false},
+        
+        {value: 'Soft Cotton', label: 'Soft Cotton', checked: false},
+       
+        {value: 'Top Sweater', label: 'Top Sweater', checked: false},
+        
+        {value: 'RED MICKY MOUSE..', label: 'RED MICKY MOUSE..', checked: false},
+        
+        {value: 'Digital Printed', label: 'Digital Printed', checked: false},
+       
+        {value: 'Ghazi Fabric', label: 'Ghazi Fabric', checked: false},
+      ],
+      }
+  ]
+
+ // ------------------get filter show dynamic end-----------------
 
 
- // Extract unique categories and brands
- const extractUniqueFilters = (products) => {
-  const uniqueCategories = [...new Set(products?.map(product => product.category))];
-  const uniqueBrands = [...new Set(products?.map(product => product.brand))];
-  return { uniqueCategories, uniqueBrands };
+//  categories and brands filter function start
+const [filter, setFilter] = useState({});
+const handleFilter = (e, section, option) => {
+  const newFilter = { ...filter, [section.id]: option.value };
+  setFilter(newFilter);
+  dispatch(fetchProductsByFiltersAsync(newFilter));
+  console.log(section.id, option.value);
 };
 
-useEffect(() => {
-  if (products.length) {
-    const { uniqueCategories, uniqueBrands } = extractUniqueFilters(products);
 
-    // Dynamically set filters based on unique categories and brands
-    const generatedFilters = [
-      {
-        id: 'category',
-        name: 'Category',
-        options: uniqueCategories.map(category => ({
-          value: category,
-          label: category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
-          checked: false,
-        })),
-      },
-      {
-        id: 'brand',
-        name: 'Brand',
-        options: uniqueBrands.map(brand => ({
-          value: brand,
-          label: brand.charAt(0).toUpperCase() + brand.slice(1), // Capitalize first letter
-          checked: false,
-        })),
-      },
-    ];
-    
-    setFilters(generatedFilters); // <-- Store filters in state
-  }
-}, [products]);
+const handleSort = (e, option) => {
+  const newFilter = { ...filter, _sort: option.sort, _order:option.order };
+  setFilter(newFilter);
+  dispatch(fetchProductsByFiltersAsync(newFilter));
+};
   
   return (
     <div className="bg-white">
@@ -205,8 +288,8 @@ useEffect(() => {
                   <div className="py-1">
                     {sortOptions.map((option) => (
                       <MenuItem key={option.name}>
-                        <a
-                          href={option.href}
+                        <p
+                          onClick={e=>handleSort(e,option)}
                           className={classNames(
                             option.current
                               ? "font-medium text-gray-900"
@@ -215,7 +298,7 @@ useEffect(() => {
                           )}
                         >
                           {option.name}
-                        </a>
+                        </p>
                       </MenuItem>
                     ))}
                   </div>
@@ -241,7 +324,7 @@ useEffect(() => {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                {filters.map((section) => (
+                {filters?.map((section) => (
                   <Disclosure
                     key={section.id}
                     as="div"
@@ -274,6 +357,9 @@ useEffect(() => {
                               id={`filter-${section.id}-${optionIdx}`}
                               name={`${section.id}[]`}
                               type="checkbox"
+                              onChange={(e) =>
+                                handleFilter(e, section, option)
+                              }
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label
@@ -420,3 +506,5 @@ useEffect(() => {
 };
 
 export default ProductList;
+
+

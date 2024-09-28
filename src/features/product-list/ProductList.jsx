@@ -37,43 +37,7 @@ const sortOptions = [
   { name: "Price: High to Low", href: "#", current: false },
 ];
 
-const filters = [
-  {
-    id: "color",
-    name: "Color",
-    options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
-    ],
-  },
-  {
-    id: "category",
-    name: "Category",
-    options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
-    ],
-  },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -81,7 +45,6 @@ function classNames(...classes) {
 
 const ProductList = () => {
   const products =  useSelector(selectAllProducts)
-  console.log('productlist',products)
   const dispatch= useDispatch()
 
   useEffect(() => {
@@ -89,9 +52,49 @@ const ProductList = () => {
       dispatch(fetchAllProductsAsync());
     }
     
-  }, [dispatch]);
+  }, [dispatch,products.length]);
  
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState([]); // <-- Use state to store filters
+
+
+ // Extract unique categories and brands
+ const extractUniqueFilters = (products) => {
+  const uniqueCategories = [...new Set(products?.map(product => product.category))];
+  const uniqueBrands = [...new Set(products?.map(product => product.brand))];
+  return { uniqueCategories, uniqueBrands };
+};
+
+useEffect(() => {
+  if (products.length) {
+    const { uniqueCategories, uniqueBrands } = extractUniqueFilters(products);
+
+    // Dynamically set filters based on unique categories and brands
+    const generatedFilters = [
+      {
+        id: 'category',
+        name: 'Category',
+        options: uniqueCategories.map(category => ({
+          value: category,
+          label: category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
+          checked: false,
+        })),
+      },
+      {
+        id: 'brand',
+        name: 'Brand',
+        options: uniqueBrands.map(brand => ({
+          value: brand,
+          label: brand.charAt(0).toUpperCase() + brand.slice(1), // Capitalize first letter
+          checked: false,
+        })),
+      },
+    ];
+    
+    setFilters(generatedFilters); // <-- Store filters in state
+  }
+}, [products]);
+  
   return (
     <div className="bg-white">
       <div>
@@ -125,7 +128,7 @@ const ProductList = () => {
 
               {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
-                {filters.map((section) => (
+                {filters?.map((section) => (
                   <Disclosure
                     key={section.id}
                     as="div"

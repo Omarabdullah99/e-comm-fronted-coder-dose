@@ -11,15 +11,15 @@ const initialState = {
     async () => {
       const response = await fetchAllProducts();
       // The value we return becomes the `fulfilled` action payload
-      console.log('slice',response)
       return response.data;
     }
   );
 
   export const fetchProductsByFiltersAsync = createAsyncThunk(
     'product/fetchProductsByFilters',
-    async (filter) => {
-      const response = await fetchProductsByFilters(filter);
+    async ({filter, sort}) => {
+      console.log('filter sort slice', {filter,sort})
+      const response = await fetchProductsByFilters(filter,sort);
       // The value we return becomes the `fulfilled` action payload
       return response.data;
     }

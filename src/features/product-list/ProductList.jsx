@@ -30,11 +30,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {fetchAllProductsAsync,selectAllProducts,fetchProductsByFiltersAsync} from './ProductSlice'
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
+  { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
+  { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
 ];
 
 
@@ -164,19 +162,42 @@ const ProductList = () => {
 
 //  categories and brands filter function start
 const [filter, setFilter] = useState({});
+const [sort, setSort] = useState({});
+
 const handleFilter = (e, section, option) => {
-  const newFilter = { ...filter, [section.id]: option.value };
+  const newFilter={...filter}
+  if(e.target.checked){
+    if(newFilter[section.id]){
+      newFilter[section.id].push(option.value)
+    } else{
+      newFilter[section.id] = [option.value]
+    }
+
+  }else{
+    const index = newFilter[section.id].findIndex(el=>el===option.value)
+    newFilter[section.id].splice(index,1);
+  }
   setFilter(newFilter);
-  dispatch(fetchProductsByFiltersAsync(newFilter));
-  console.log(section.id, option.value);
+
 };
+
+
 
 
 const handleSort = (e, option) => {
-  const newFilter = { ...filter, _sort: option.sort, _order:option.order };
-  setFilter(newFilter);
-  dispatch(fetchProductsByFiltersAsync(newFilter));
+  const newsort = { _sort: option.sort, _order: option.order };
+  setSort(newsort);
+
 };
+
+
+
+useEffect(() => {
+  dispatch(fetchProductsByFiltersAsync({filter, sort}));
+}, [dispatch, filter, sort]);
+  
+
+
   
   return (
     <div className="bg-white">
@@ -244,6 +265,7 @@ const handleSort = (e, option) => {
                               id={`filter-mobile-${section.id}-${optionIdx}`}
                               name={`${section.id}[]`}
                               type="checkbox"
+                              onChange={(e) => handleFilter(e, section, option)}
                               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                             />
                             <label
@@ -388,7 +410,7 @@ const handleSort = (e, option) => {
                             <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                               <img
                                 alt={product?.title}
-                                src={product?.thumbnail}
+                                src={''}
                                 className="h-full w-full  object-fill lg:h-full lg:w-full"
                               />
                             </div>

@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import Navbar from '../navbar/Navbar'
+import { fetchProductByIdAsync, selectedProduct } from './ProductSlice'
+import { useDispatch, useSelector } from 'react-redux'
+
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -65,6 +68,15 @@ function classNames(...classes) {
 const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState(product.colors[0])
     const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+    const dispatch=useDispatch()
+    useEffect(()=>{
+      dispatch(fetchProductByIdAsync(2))
+    },[dispatch])
+
+    const productById= useSelector(selectedProduct)
+
+    console.log('productdetails',productById)
+
   return (
     <div>
     <Navbar>

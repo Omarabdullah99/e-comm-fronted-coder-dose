@@ -8,32 +8,18 @@ export function fetchAllProducts() {
     );
   }
 
-//   export function fetchProductsByFilters(filter) {
-//   // filter = {"category":"smartphone"}
-//   // TODO : on server we will support multi values
-//   console.log('api filter', filter)
-//   let queryString = '';
-//   for(let key in filter){
-//     queryString += `${key}=${filter[key]}&`
-//   }
 
-//   return new Promise(async (resolve) =>{
-//     //TODO: we will not hard-code server URL here
-//     const response = await fetch('http://localhost:8000/products?'+queryString) 
-//     const data = await response.json()
-//     resolve({data})
-//   }
-//   );
-// }
 
 
 export function fetchProductsByFilters(filter,sort) {
   // filter = {"category":["smartphone","laptops"]}
   // sort = {_sort:"price",_order="desc"}
+  // pagination = {_page:1,_limit=10} 
 
   // TODO : on server we will support multi values in filter
-  console.log('api filter sort',filter,sort)
+
   let queryString = '';
+
   for(let key in filter){
     const categoryValues = filter[key];
     if(categoryValues.length){
@@ -45,6 +31,7 @@ export function fetchProductsByFilters(filter,sort) {
     queryString += `${key}=${sort[key]}&`
   }
 
+ 
   return new Promise(async (resolve) =>{
     //TODO: we will not hard-code server URL here
     const response = await fetch('http://localhost:8000/products?'+queryString) 
@@ -54,3 +41,19 @@ export function fetchProductsByFilters(filter,sort) {
   );
 }
 
+export function fetchCategories(){
+  return new Promise(async(resolve)=>{
+    const response= await fetch('http://localhost:8000/categories')
+    const data= await response.json()
+    resolve ({data})
+  })
+
+}
+
+export function fetchBrands(){
+  return new Promise(async(resolve)=>{
+    const response = await fetch('http://localhost:8000/brands')
+    const data= await response.json()
+    resolve({data})
+  })
+}

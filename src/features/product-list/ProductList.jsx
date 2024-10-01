@@ -27,7 +27,9 @@ import {
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchAllProductsAsync,selectAllProducts,fetchProductsByFiltersAsync} from './ProductSlice'
+import {fetchAllProductsAsync,selectAllProducts,fetchProductsByFiltersAsync, selectAllCategories, fetchAllCategoriesAsync, fetchAllBrandsAsync, selectAllBrands} from './ProductSlice'
+
+
 
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
@@ -51,6 +53,17 @@ const ProductList = () => {
     }
     
   }, [dispatch,products.length]);
+
+  useEffect(() => {
+    dispatch(fetchAllCategoriesAsync())
+    dispatch(fetchAllBrandsAsync())
+  }, [])
+
+  const categories= useSelector(selectAllCategories)
+  const brands= useSelector(selectAllBrands)
+
+
+  
  
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -59,26 +72,7 @@ const ProductList = () => {
     {
       id: "category",
       name: "Category",
-      options: [
-       
-      {value: 'smartphones', label: 'Smartphones', checked: false},
-       
-      {value: 'laptops', label: 'Laptops', checked: false},
-       
-      {value: 'fragrances', label: 'Fragrances', checked: false},
-      
-      {value: 'skincare', label: 'Skincare', checked: false},
-       
-      {value: 'groceries', label: 'Groceries', checked: false},
-       
-      {value: 'home-decoration', label: 'Home-decoration', checked: false},
-       
-      {value: 'furniture', label: 'Furniture', checked: false},
-       
-      {value: 'tops', label: 'Tops', checked: false},
-       
-      {value: 'womens-dresses', label: 'Womens-dresses', checked: false},
-      ],
+      options: categories
       
       },
 
@@ -86,74 +80,7 @@ const ProductList = () => {
 
         id: "brand",
         name: "Brand",
-        options:[
-        
-        {value: 'Apple', label: 'Apple', checked: false},
-         
-        {value: 'Samsung', label: 'Samsung', checked: false},
-         
-        {value: 'OPPO', label: 'OPPO', checked: false},
-         
-        {value: 'Huawei', label: 'Huawei', checked: false},
-        
-        {value: 'Microsoft Surface', label: 'Microsoft Surface', checked: false},
-        
-        {value: 'Infinix', label: 'Infinix', checked: false},
-        
-        {value: 'HP Pavilion', label: 'HP Pavilion', checked: false},
-        
-        {value: 'Impression of Acqua Di Gio', label: 'Impression of Acqua Di Gio', checked: false},
-        
-        {value: 'Royal_Mirage', label: 'Royal_Mirage', checked: false},
-        
-        {value: 'Fog Scent Xpressio', label: 'Fog Scent Xpressio', checked: false},
-        
-        {value: 'Al Munakh', label: 'Al Munakh', checked: false},
-        
-        {value: 'Lord - Al-Rehab', label: 'Lord - Al-Rehab', checked: false},
-       
-        {value: "L'Oreal Paris", label: "L'Oreal Paris", checked: false},
-       
-        {value: 'Hemani Tea', label: 'Hemani Tea', checked: false},
-       
-        {value: 'Dermive', label: 'Dermive', checked: false},
-        
-        {value: 'ROREC White Rice', label: 'ROREC White Rice', checked: false},
-       
-        {value: 'Fair & Clear', label: 'Fair & Clear', checked: false},
-       
-        {value: 'Saaf & Khaas', label: 'Saaf & Khaas', checked: false},
-       
-        {value: 'Bake Parlor Big', label: 'Bake Parlor Big', checked: false},
-        
-        {value: 'Baking Food Items', label: 'Baking Food Items', checked: false},
-       
-        {value: 'fauji', label: 'Fauji', checked: false},
-        {value: 'Dry Rose', label: 'Dry Rose', checked: false},
-        {value: 'Boho Decor', label: 'Boho Decor', checked: false},
-        {value: 'Flying Wooden', label: 'Flying Wooden', checked: false},
-        {value: 'LED Lights', label: 'LED Lights', checked: false},
-        {value: 'luxury palace', label: 'Luxury palace', checked: false}, 
-        {value: 'Golden', label: 'Golden', checked: false}, 
-        {value: 'Furniture Bed Set', label: 'Furniture Bed Set', checked: false},
-        {value: 'Ratttan Outdoor', label: 'Ratttan Outdoor', checked: false},
-        {value: 'Kitchen Shelf', label: 'Kitchen Shelf', checked: false},
-        {value: 'Multi Purpose', label: 'Multi Purpose', checked: false},
-       
-        {value: 'AmnaMart', label: 'AmnaMart', checked: false},
-       
-        {value: 'Professional Wear', label: 'Professional Wear', checked: false},
-        
-        {value: 'Soft Cotton', label: 'Soft Cotton', checked: false},
-       
-        {value: 'Top Sweater', label: 'Top Sweater', checked: false},
-        
-        {value: 'RED MICKY MOUSE..', label: 'RED MICKY MOUSE..', checked: false},
-        
-        {value: 'Digital Printed', label: 'Digital Printed', checked: false},
-       
-        {value: 'Ghazi Fabric', label: 'Ghazi Fabric', checked: false},
-      ],
+        options:brands
       }
   ]
 
@@ -163,6 +90,7 @@ const ProductList = () => {
 //  categories and brands filter function start
 const [filter, setFilter] = useState({});
 const [sort, setSort] = useState({});
+
 
 const handleFilter = (e, section, option) => {
   const newFilter={...filter}
@@ -191,11 +119,11 @@ const handleSort = (e, option) => {
 };
 
 
-
 useEffect(() => {
-  dispatch(fetchProductsByFiltersAsync({filter, sort}));
+  dispatch(fetchProductsByFiltersAsync({filter, sort }));
 }, [dispatch, filter, sort]);
   
+
 
 
   

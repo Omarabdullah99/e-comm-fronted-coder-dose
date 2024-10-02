@@ -8,6 +8,20 @@ export function fetchAllProducts() {
     );
   }
 
+  
+
+  export function fetchProductById(productId){
+    return new Promise(async(resolve)=>{
+      const id= productId
+      console.log('productapi id', id)
+      const respose= await fetch('http://localhost:8000/products?id=' + id)
+      const data = await respose.json()
+      console.log('porduct api details', data)
+      resolve({data})
+
+    })
+
+  }
 
 
 
@@ -56,14 +70,4 @@ export function fetchBrands(){
     const data= await response.json()
     resolve({data})
   })
-}
-
-export function fetchProductById(id){
-  return new Promise(async(resolve)=>{
-    const response= await fetch('http://localhost:8000/products/'+id)
-    const data= await response.json()
-    resolve({data})
-
-  })
-
 }

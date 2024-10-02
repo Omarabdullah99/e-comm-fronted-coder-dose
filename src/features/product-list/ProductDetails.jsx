@@ -73,18 +73,21 @@ const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState(colors[0])
     const [selectedSize, setSelectedSize] = useState(sizes[2])
     const params= useParams()
-    console.log('params id',params.id)
     const dispatch=useDispatch()
     useEffect(()=>{
       dispatch(fetchProductByIdAsync(params?.id))
-    },[dispatch])
+    },[dispatch, params?.id])
 
     const productById= useSelector(selectedProduct)
+    if (!productById) {
+      return <div>লোড হচ্ছে...</div>;  // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  }
 
-    console.log('productdetails ProductDetails.jsx',productById)
 
   return (
-    <div>
+    <>
+    
+     <div>
     <Navbar>
     <div className="bg-white">
       <div className="pt-6">
@@ -160,7 +163,7 @@ const ProductDetails = () => {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{productById[0].price}</p>
+            <p className="text-3xl tracking-tight text-gray-900">{productById[0]?.price}</p>
 
 
             <form className="mt-10">
@@ -285,6 +288,8 @@ const ProductDetails = () => {
     </div>
     </Navbar>
     </div>
+    </>
+   
   )
 }
 

@@ -16,6 +16,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
+import {useDispatch, useSelector} from 'react-redux'
+import {  selectedLoggedInUser } from "../auth/authSlice";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -40,6 +42,7 @@ function classNames(...classes) {
 }
 
 const Navbar = ({ children }) => {
+  
   return (
     <>
       <div className="min-h-full">

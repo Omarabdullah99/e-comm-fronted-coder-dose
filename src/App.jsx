@@ -15,6 +15,8 @@ import {
 import CartPage from './page/CartPage'
 import Checkout from './page/CheckoutPage'
 import ProductDetailsPage from './page/ProductDetailsPage'
+import { Protected } from './features/auth/component/Protected'
+
 
 const router = createBrowserRouter([
   {
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/cart',
-    element: <CartPage></CartPage>,
+    element: <Protected><CartPage></CartPage></Protected>,
   },
   {
     path: '/checkout',

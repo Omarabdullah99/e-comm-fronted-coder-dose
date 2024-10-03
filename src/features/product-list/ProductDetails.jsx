@@ -5,40 +5,11 @@ import Navbar from '../navbar/Navbar'
 import { fetchProductByIdAsync, selectedProduct } from './ProductSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { selectedLoggedInUser } from '../auth/authSlice'
+import { createCartByAsync } from '../cart/cartSlice'
 
 
-const product = {
-  name: 'Basic Tee 6-Pack',
-  price: '$192',
-  href: '#',
-  breadcrumbs: [
-    { id: 1, name: 'Men', href: '#' },
-    { id: 2, name: 'Clothing', href: '#' },
-  ],
-  images: [
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-      alt: 'Two each of gray, white, and black shirts laying flat.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-      alt: 'Model wearing plain black basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-      alt: 'Model wearing plain gray basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-      alt: 'Model wearing plain white basic tee.',
-    },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
- 
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
+
 
 
 const colors = [
@@ -74,6 +45,7 @@ const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState(sizes[2])
     const params= useParams()
     const dispatch=useDispatch()
+    const user= useSelector(selectedLoggedInUser)
     useEffect(()=>{
       dispatch(fetchProductByIdAsync(params?.id))
     },[dispatch, params?.id])
@@ -83,6 +55,15 @@ const ProductDetails = () => {
       return <div>লোড হচ্ছে...</div>;  // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
   }
 
+  const product= productById[0];
+  // console.log('detil product',product)
+ 
+
+  const handleCart=(e)=>{
+     e.preventDefault();
+     dispatch(createCartByAsync({...product, quantity:1, user:user?.id}))
+
+  }
 
   return (
     <>
@@ -126,13 +107,13 @@ const ProductDetails = () => {
         {/* Product info */}
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{productById[0]?.title}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product?.title}</h1>
           </div>
 
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{productById[0]?.price}</p>
+            <p className="text-3xl tracking-tight text-gray-900">{product?.price}</p>
 
 
             <form className="mt-10">
@@ -222,6 +203,7 @@ const ProductDetails = () => {
               <button
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={handleCart}
               >
                 Add to Cart
               </button>
@@ -234,7 +216,7 @@ const ProductDetails = () => {
               <h3 className='text-sm font-medium text-gray-900'>Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{productById[0]?.description}</p>
+                <p className="text-base text-gray-900">{product?.description}</p>
               </div>
             </div>
 

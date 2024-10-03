@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import {useForm} from 'react-hook-form'
-import { checkUserAsync,  selectedLoggedInUser } from '../authSlice';
+import { checkUserAsync,  selectedLoggedInUser, selectError } from '../authSlice';
 import {useDispatch,useSelector} from 'react-redux'
 
 export default function Login() {
   const {register,handleSubmit, formState:{errors}}=useForm()
   const dispatch=useDispatch()
   const user= useSelector(selectedLoggedInUser)
-  console.log('foutn login user', user)
+  // console.log('user login.jsx',user)
+  const Error=useSelector(selectError)
+  // console.log('error check Login.jsx',Error)
+
 
   return (
     <>
@@ -46,6 +49,8 @@ export default function Login() {
                   <p className="text-red-500">{errors?.email?.message}</p>
                 )}
               </div>
+
+             
             </div>
 
             <div>
@@ -72,6 +77,9 @@ export default function Login() {
                   <p className='text-red-500'>{errors?.password?.message}</p>
                 )}
               </div>
+              {Error && (
+                  <p className="text-red-500">{Error?.message}</p>
+                )}
             </div>
 
             <div>

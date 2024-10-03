@@ -3,7 +3,8 @@ import { checkUser, createUser } from './authApi';
 
 const initialState={
     status:'idel',
-    loggedInUser:null
+    loggedInUser:null,
+    error:null
 }
 
 export const createUserAsync= createAsyncThunk(
@@ -32,18 +33,26 @@ export const userSlice = createSlice({
             state.status = 'loading';
           })
           .addCase(createUserAsync.fulfilled, (state,action)=>{
+            state.status='fullfiled'
             state.loggedInUser= action.payload
           })
           .addCase(checkUserAsync.pending, (state)=>{
             state.status='loading'
           })
           .addCase(checkUserAsync.fulfilled, (state, action)=>{
+            state.status='fullfiled'
             state.loggedInUser= action.payload
+          })
+          .addCase(checkUserAsync.rejected, (state,action)=>{
+            state.status='reject';
+            state.error= action.error
+
           })
     }
   })
 
   export const selectedLoggedInUser=(state)=> state.auth.loggedInUser
+  export const selectError=(state)=> state.auth.error
   export default userSlice.reducer;
   
 

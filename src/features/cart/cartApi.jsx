@@ -12,3 +12,14 @@ export function createCart(cartItem){
 
 }
 
+export function getCartItemByUserId(userId){
+    return new Promise(async(resolve)=>{
+        const id= userId
+        const respose= await fetch('http://localhost:8000/carts?user=' +id)
+        const data= await respose.json()
+        resolve({data})
+
+    })
+
+}
+

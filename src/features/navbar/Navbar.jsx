@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 
 import {useDispatch, useSelector} from 'react-redux'
 import {  selectedLoggedInUser } from "../auth/authSlice";
+import { getCartItemByUserIdAsync, selectedCartItemByUserId } from "../cart/cartSlice";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -41,7 +42,18 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+
+
 const Navbar = ({ children }) => {
+  const loginuser=useSelector(selectedLoggedInUser)
+  const selectedCartItem= useSelector(selectedCartItemByUserId)
+  const dispatch=useDispatch()
+
+  useEffect(()=>{
+    dispatch(getCartItemByUserIdAsync(loginuser?.id))
+  },[dispatch, loginuser?.id])
+  // console.log('login user navbar', loginuser)
+  console.log('selectCartItem',selectedCartItem)
   
   return (
     <>
@@ -94,7 +106,7 @@ const Navbar = ({ children }) => {
                     </button>
                   </Link>
                   <span className="inline-flex items-center rounded-md mb-7 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                    3
+                    {selectedCartItem ? selectedCartItem?.length : 0}
                   </span>
 
                   {/* Profile dropdown */}
@@ -193,7 +205,7 @@ const Navbar = ({ children }) => {
                   </button>
                 </Link>
                 <span className="inline-flex items-center rounded-md bg-red-50 mb-7 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                  3
+                   {selectedCartItem ? selectedCartItem?.length :0}
                 </span>
               </div>
               <div className="mt-3 space-y-1 px-2">

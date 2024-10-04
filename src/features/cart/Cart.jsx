@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { selectedCartItemByUserId, updateCartItemAsync } from './cartSlice';
+import { deleteCartItemAsync, selectedCartItemByUserId, updateCartItemAsync } from './cartSlice';
 
 
 
@@ -18,6 +18,13 @@ export default function Cart() {
     e.preventDefault()
     // console.log('value', e.target.value)
     dispatch(updateCartItemAsync({...product, quantity: +e.target.value}))
+  }
+
+  const handleRemove=(e,id)=>{
+    e.preventDefault()
+    // console.log('id', id)
+    dispatch(deleteCartItemAsync(id))
+
   }
   return (
     <>
@@ -70,6 +77,7 @@ export default function Cart() {
 
                         <div className="flex">
                           <button
+                            onClick={(e)=>handleRemove(e,product.id)}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >

@@ -36,3 +36,14 @@ export function updateCartItem(update){
     })
 }
 
+export function deleteCart(itemid){
+    return new Promise(async(resolve)=>{
+        const response= await fetch('http://localhost:8000/carts/'+itemid,{
+            method: 'DELETE',
+            headers: {'content-type': 'application/json'}
+        })
+        const data= await response.json()
+        resolve({data:{id:itemid}})
+    })
+
+}

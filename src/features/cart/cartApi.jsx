@@ -23,3 +23,16 @@ export function getCartItemByUserId(userId){
 
 }
 
+export function updateCartItem(update){
+    return new Promise(async(resolve)=>{
+        // console.log('update item api', update)
+        const response= await fetch('http://localhost:8000/carts/'+update.id,{
+            method: 'PATCH',
+            body: JSON.stringify(update),
+            headers: {'content-type': 'application/json'}
+        })
+        const data= await response.json()
+        resolve({data})
+    })
+}
+

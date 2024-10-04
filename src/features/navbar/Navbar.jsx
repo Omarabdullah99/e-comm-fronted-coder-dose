@@ -53,7 +53,7 @@ const Navbar = ({ children }) => {
     dispatch(getCartItemByUserIdAsync(loginuser?.id))
   },[dispatch, loginuser?.id])
   // console.log('login user navbar', loginuser)
-  console.log('selectCartItem',selectedCartItem)
+  // console.log('selectCartItem',selectedCartItem)
   
   return (
     <>

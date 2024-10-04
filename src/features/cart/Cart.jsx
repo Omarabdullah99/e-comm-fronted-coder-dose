@@ -2,18 +2,23 @@ import React, { useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { selectedCartItemByUserId } from './cartSlice';
+import { selectedCartItemByUserId, updateCartItemAsync } from './cartSlice';
 
 
 
 export default function Cart() {
   const dispatch=useDispatch()
   const products=useSelector(selectedCartItemByUserId)
-  console.log('item', products)
+  // console.log('item', products)
   const totalAmount = products?.reduce((amount, item)=>item.price*item.quantity +amount,0)
   const totalItems = products?.reduce((total, item)=>item.quantity + total,0)
   const [open, setOpen] = useState(true);
 
+  const handleQuantity=(e,product)=>{
+    e.preventDefault()
+    // console.log('value', e.target.value)
+    dispatch(updateCartItemAsync({...product, quantity: +e.target.value}))
+  }
   return (
     <>
       <div>
@@ -54,9 +59,12 @@ export default function Cart() {
                           >
                             Qty
                           </label>
-                          <select>
+                          <select onChange={(e)=> handleQuantity(e,product)} value={product?.quantity}>
                             <option value="1">1</option>
                             <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
                           </select>
                         </div>
 

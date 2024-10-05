@@ -6,7 +6,12 @@ import {
   updateCartItemAsync,
 } from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
-import { selectedLoggedInUser, updateUserAsync } from "../features/auth/authSlice";
+import {
+  selectedLoggedInUser,
+  updateUserAsync,
+} from "../features/auth/authSlice";
+import { useState } from "react";
+import { createOrderAsync } from "../features/orders/orderSlice";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -27,7 +32,10 @@ function Checkout() {
     0
   );
 
-  const user=useSelector(selectedLoggedInUser)
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+
+  const user = useSelector(selectedLoggedInUser);
   // console.log('user',user)
 
   const handleQuantity = (e, product) => {
@@ -42,17 +50,42 @@ function Checkout() {
     dispatch(deleteCartItemAsync(id));
   };
 
+  const handleAddress = (e) => {
+    // console.log(e.target.value)
+    setSelectedAddress(user?.addresses[e.target.value]);
+  };
+
+  const handlePayment = (e) => {
+    // console.log(e.target.value)
+    setPaymentMethod(e.target.value);
+  };
+
+  const handleOrder=()=>{
+    const order= {products,totalAmount, totalItems, user, paymentMethod, selectedAddress}
+    // console.log('order click',order)
+    dispatch(createOrderAsync(order))
+  }
+  // console.log('selectedAddress',selectedAddress)
+  // console.log("paymentmethod",paymentMethod)
   return (
     <>
       {!products?.length && <Navigate to={"/"} replace="true"></Navigate>}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3 mb-4">
-            <form className="bg-white px-5 py-12 mt-12" onSubmit={handleSubmit((data)=>{
-              // console.log('address', data)
-              dispatch(updateUserAsync({...user, addresses:[...user?.addresses, data]}))
-              reset()
-            })}>
+            <form
+              className="bg-white px-5 py-12 mt-12"
+              onSubmit={handleSubmit((data) => {
+                // console.log('address', data)
+                dispatch(
+                  updateUserAsync({
+                    ...user,
+                    addresses: [...user?.addresses, data],
+                  })
+                );
+                reset();
+              })}
+            >
               <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
                   <h2 className="text-2xl font-semibold leading-7 text-gray-900">
@@ -73,12 +106,17 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("name", { required: "Name is required" })}
+                          {...register("name", {
+                            required: "Name is required",
+                          })}
                           id="name"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                         {errors?.email && (
-                  <p className="text-red-500">{errors?.name?.message}</p>)}
+                        {errors?.email && (
+                          <p className="text-red-500">
+                            {errors?.name?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -92,12 +130,17 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           id="email"
-                          {...register("email", { required: 'Email is required' })}
+                          {...register("email", {
+                            required: "Email is required",
+                          })}
                           type="email"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors?.email && (
-                  <p className="text-red-500">{errors?.email?.message}</p>)}
+                          <p className="text-red-500">
+                            {errors?.email?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -111,7 +154,9 @@ function Checkout() {
                       <div className="mt-2">
                         <select
                           id="country"
-                          {...register("country", { required: "Country is required" })}
+                          {...register("country", {
+                            required: "Country is required",
+                          })}
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                         >
                           <option>United States</option>
@@ -119,7 +164,10 @@ function Checkout() {
                           <option>Mexico</option>
                         </select>
                         {errors?.country && (
-                  <p className="text-red-500">{errors?.country?.message}</p>)}
+                          <p className="text-red-500">
+                            {errors?.country?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -133,12 +181,17 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           id="number"
-                          {...register("number", { required: 'Number is required' })}
+                          {...register("number", {
+                            required: "Number is required",
+                          })}
                           type="number"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors?.number && (
-                  <p className="text-red-500">{errors?.number?.message}</p>)}
+                          <p className="text-red-500">
+                            {errors?.number?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -152,12 +205,17 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("address", { required: "Address is required" })}
+                          {...register("address", {
+                            required: "Address is required",
+                          })}
                           id="address"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors?.address && (
-                  <p className="text-red-500">{errors?.address?.message}</p>)}
+                          <p className="text-red-500">
+                            {errors?.address?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -171,15 +229,19 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("city", { required: 'City is required' })}
+                          {...register("city", {
+                            required: "City is required",
+                          })}
                           id="city"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors?.city && (
-                  <p className="text-red-500">{errors?.city?.message}</p>)}
+                          <p className="text-red-500">
+                            {errors?.city?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
-
 
                     <div className="sm:col-span-3">
                       <label
@@ -191,12 +253,13 @@ function Checkout() {
                       <div className="mt-2">
                         <input
                           type="text"
-                          {...register("gpo", { required: 'gpo is required' })}
+                          {...register("gpo", { required: "gpo is required" })}
                           id="gpo"
                           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                         {errors?.gpo && (
-                  <p className="text-red-500">{errors?.gpo?.message}</p>)}
+                          <p className="text-red-500">{errors?.gpo?.message}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -225,15 +288,17 @@ function Checkout() {
                     Choose from Existing addresses
                   </p>
                   <ul className="mt-3" role="list">
-                    {user?.addresses?.map((address) => (
+                    {user?.addresses?.map((address, index) => (
                       <li
-                        key={address.email}
+                        key={index}
                         className="flex justify-between items-center gap-x-6 px-5 py-5 border-solid border-2 border-gray-200 mb-2"
                       >
                         <div className="flex items-center gap-x-4">
                           <input
                             name="address"
                             type="radio"
+                            value={index}
+                            onChange={handleAddress}
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           />
                           <div className="min-w-0 flex-auto">
@@ -253,7 +318,7 @@ function Checkout() {
                             Phone: {address?.number}
                           </p>
                           <p className="text-sm leading-6 text-gray-500">
-                          City:  {address.city}
+                            City: {address.city}
                           </p>
                         </div>
                       </li>
@@ -273,7 +338,10 @@ function Checkout() {
                           <input
                             id="cash"
                             name="payments"
+                            onChange={handlePayment}
+                            value="cash"
                             type="radio"
+                            checked={paymentMethod === "cash"}
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           />
                           <label
@@ -287,7 +355,10 @@ function Checkout() {
                           <input
                             id="card"
                             name="payments"
+                            onChange={handlePayment}
+                            checked={paymentMethod === "card"}
                             type="radio"
+                            value="card"
                             className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                           />
                           <label
@@ -383,14 +454,9 @@ function Checkout() {
                 <p className="mt-0.5 text-sm text-gray-500">
                   Shipping and taxes calculated at checkout.
                 </p>
-                <div className="mt-6">
-                  <Link
-                    to="/checkout"
-                    className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                  >
-                    Checkout
-                  </Link>
-                </div>
+                <button onClick={handleOrder} className="w-full rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 mt-6">
+                  Order Now
+                </button>
                 <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                   <p>
                     or

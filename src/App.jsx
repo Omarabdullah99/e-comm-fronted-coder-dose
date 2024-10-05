@@ -16,6 +16,7 @@ import CartPage from './page/CartPage'
 import Checkout from './page/CheckoutPage'
 import ProductDetailsPage from './page/ProductDetailsPage'
 import { Protected } from './features/auth/component/Protected'
+import PageNotFound from './page/404'
 
 
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
     path: '/productdetails/:id',
     element: <ProductDetailsPage></ProductDetailsPage>,
   },
+  {
+    path: '*',
+    element: <PageNotFound></PageNotFound>,
+  }
 ]);
 
 

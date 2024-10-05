@@ -61,9 +61,16 @@ function Checkout() {
   };
 
   const handleOrder=()=>{
-    const order= {products,totalAmount, totalItems, user, paymentMethod, selectedAddress}
-    // console.log('order click',order)
+    if(selectedAddress && paymentMethod){
+      const order= {products,totalAmount, totalItems, user, paymentMethod, selectedAddress,status:'pending'}
+       // console.log('order click',order)
     dispatch(createOrderAsync(order))
+
+    }else{
+      alert('select address and payment method')
+    }
+    
+   
   }
   // console.log('selectedAddress',selectedAddress)
   // console.log("paymentmethod",paymentMethod)

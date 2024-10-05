@@ -11,7 +11,7 @@ import {
   updateUserAsync,
 } from "../features/auth/authSlice";
 import { useState } from "react";
-import { createOrderAsync } from "../features/orders/orderSlice";
+import { createOrderAsync, selectCurrentOrder } from "../features/orders/orderSlice";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -37,7 +37,8 @@ function Checkout() {
 
   const user = useSelector(selectedLoggedInUser);
   // console.log('user',user)
-
+  const currentOrder=useSelector(selectCurrentOrder)
+  // console.log('currentOrder checkoutpage.jsx',currentOrder)
   const handleQuantity = (e, product) => {
     e.preventDefault();
     // console.log('value', e.target.value)
@@ -77,6 +78,7 @@ function Checkout() {
   return (
     <>
       {!products?.length && <Navigate to={"/"} replace="true"></Navigate>}
+      {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3 mb-4">

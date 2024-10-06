@@ -20,6 +20,8 @@ import PageNotFound from './page/404'
 import OrderSuccessPage from './page/OrderSuccessPage'
 import MyOrders from './features/user/component/MyOrders'
 import MyProfilePage from './page/MyProfilePage'
+import Logout from './features/auth/component/LogOut'
+import ForgotPassword from './features/auth/component/ForgotPassword'
 
 
 const router = createBrowserRouter([
@@ -60,6 +62,14 @@ const router = createBrowserRouter([
   {
     path: '/my-profile',
     element: <MyProfilePage></MyProfilePage>,
+  },
+  {
+    path: '/logout',
+    element: <Logout></Logout>,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPassword></ForgotPassword>,
   },
   {
     path: '*',

@@ -1,5 +1,5 @@
 export function createCart(cartItem){
-    console.log('api cartitem check', cartItem)
+    // console.log('api cartitem check', cartItem)
     return new Promise(async(resolve)=>{
         const response= await fetch('http://localhost:8000/carts',{
             method: 'POST',
@@ -44,6 +44,23 @@ export function deleteCart(itemid){
         })
         const data= await response.json()
         resolve({data:{id:itemid}})
+    })
+
+}
+
+
+export function resetCart(userId){
+    return new Promise(async(resolve)=>{
+        //getCartItem by specific user id
+        const response= await getCartItemByUserId(userId)
+        console.log('getcartById by reset', response)
+        const items= response.data
+
+        for(let item of items){
+            //delete cartItem by specific user id
+          await  deleteCart(item.id)
+        }
+        resolve({status:'succes reset cart'})
     })
 
 }

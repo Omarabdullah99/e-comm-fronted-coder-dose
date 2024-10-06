@@ -18,6 +18,7 @@ import ProductDetailsPage from './page/ProductDetailsPage'
 import { Protected } from './features/auth/component/Protected'
 import PageNotFound from './page/404'
 import OrderSuccessPage from './page/OrderSuccessPage'
+import MyOrders from './features/user/component/MyOrders'
 
 
 const router = createBrowserRouter([
@@ -48,6 +49,12 @@ const router = createBrowserRouter([
   {
     path: '/order-success/:id',
     element: <OrderSuccessPage></OrderSuccessPage>,
+  },
+
+  //user path link start
+  {
+    path: '/my-orders',
+    element: <MyOrders></MyOrders>,
   },
   {
     path: '*',

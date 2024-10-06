@@ -84,7 +84,7 @@ const MyOrders = () => {
               <p>Total Items in Cart</p>
               <p>{order.totalItems} items</p>
             </div>
-            <p className="mt-0.5 text-sm text-gray-500">
+            <p className="mt-0.5 mb-4 text-sm text-gray-500">
               Shipping Address :
             </p>
             <div
@@ -97,16 +97,16 @@ const MyOrders = () => {
                           {order.selectedAddress.name}
                         </p>
                         <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                          {order.selectedAddress.street}
+                          {order.selectedAddress.address}
                         </p>
                         <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                          {order.selectedAddress.pinCode}
+                          {order.selectedAddress.gpo}
                         </p>
                       </div>
                     </div>
                     <div className="hidden sm:flex sm:flex-col sm:items-end">
                       <p className="text-sm leading-6 text-gray-900">
-                        Phone: {order.selectedAddress.phone}
+                        Phone: {order.selectedAddress.number}
                       </p>
                       <p className="text-sm leading-6 text-gray-500">
                         {order.selectedAddress.city}

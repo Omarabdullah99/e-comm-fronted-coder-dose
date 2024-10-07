@@ -29,10 +29,12 @@ const navigation = [
   { name: 'Dashboard', link: '#', user: true },
   { name: 'Team', link: '#', user: true },
   { name: 'Admin', link: '/admin', admin: true },
+  { name: 'Orders', link: '/admin/orders', admin: true },
 ];
 const userNavigation = [
   { name: "Your Profile", link: "/my-profile" },
   { name: "My Orders", link: "/my-orders" },
+  { name: 'Orders', link: '/admin/orders', admin: true },
   { name: "Sign out", link: "/logout" },
 ];
 

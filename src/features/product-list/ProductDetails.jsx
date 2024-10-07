@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { selectedLoggedInUser } from '../auth/authSlice'
 import { createCartByAsync } from '../cart/cartSlice'
+import { discountedPrice } from '../../app/constants'
 
 
 
@@ -113,7 +114,10 @@ const ProductDetails = () => {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{product?.price}</p>
+            <p className="text-xl tracking-tight  line-through text-gray-900">{product?.price}</p>
+            <p className="text-3xl tracking-tight text-gray-900">
+                ${discountedPrice(product)}
+              </p>
 
 
             <form className="mt-10">

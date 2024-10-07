@@ -6,7 +6,7 @@ import { fetchProductByIdAsync, selectedProduct } from './ProductSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { selectedLoggedInUser } from '../auth/authSlice'
-import { createCartByAsync } from '../cart/cartSlice'
+import { createCartByAsync, selectedCartItemByUserId } from '../cart/cartSlice'
 import { discountedPrice } from '../../app/constants'
 
 
@@ -52,6 +52,8 @@ const ProductDetails = () => {
     },[dispatch, params?.id])
 
     const productById= useSelector(selectedProduct)
+    const selectedCardByUserId= useSelector(selectedCartItemByUserId)
+    // console.log('useridcart check',selectedCardByUserId)
     if (!productById) {
       return <div>লোড হচ্ছে...</div>;  // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
   }
@@ -62,7 +64,13 @@ const ProductDetails = () => {
 
   const handleCart=(e)=>{
      e.preventDefault();
-     dispatch(createCartByAsync({...product, quantity:1, user:user?.id}))
+     if (selectedCardByUserId.findIndex((item) => item.id === product.id) < 0) {
+      dispatch(createCartByAsync({...product, quantity:1, user:user?.id}))
+     }
+     else{
+      console.log('cart already added')
+     }
+     
 
   }
 

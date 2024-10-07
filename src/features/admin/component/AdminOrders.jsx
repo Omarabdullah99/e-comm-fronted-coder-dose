@@ -7,25 +7,30 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
-import { fetchAllOrdersAsync, selectAllOrders } from '../../orders/orderSlice';
+import { fetchAllOrdersAsync, selectAllOrders, updateOrderAsync } from '../../orders/orderSlice';
 import { discountedPrice } from '../../../app/constants';
 
 function AdminOrders() {
 
   const dispatch = useDispatch();
   const orders = useSelector(selectAllOrders);
-  console.log('seletctallorders',orders)
+//   console.log('seletctallorders',orders)
   const [editableOrderId, setEditableOrderId] = useState(-1);
 
   const handleEdit = (order) => {
-    console.log('hadnleEdit',order)
+    // console.log('hadnleEdit',order)
+    setEditableOrderId(order.id)
   };
   const handleShow = () => {
     console.log('handleShow');
   };
 
   const handleUpdate = (e, order) => {
-    console.log('handleUpdate',order)
+    // console.log('handleUpdate', e.target.value)
+    const updatedOrder={...order, status: e.target.value }
+    // console.log('handleupate',updatedOrder)
+    dispatch(updateOrderAsync(updatedOrder))
+    setEditableOrderId(-1)
   };
 
 
@@ -124,13 +129,13 @@ function AdminOrders() {
                     </td>
                     <td className="py-3 px-6 text-center">
                       <div className="flex item-center justify-center">
-                        <div className="w-6 mr-4 transform hover:text-purple-500 hover:scale-120">
+                        <div className="w-6 mr-4 cursor-pointer transform hover:text-purple-500 hover:scale-120">
                           <EyeIcon
                             className="w-8 h-8"
                             onClick={(e) => handleShow(order)}
                           ></EyeIcon>
                         </div>
-                        <div className="w-6 mr-2 transform hover:text-purple-500 hover:scale-120">
+                        <div className="w-6 mr-2 cursor-pointer transform hover:text-purple-500 hover:scale-120">
                           <PencilIcon
                             className="w-8 h-8"
                             onClick={(e) => handleEdit(order)}

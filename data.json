@@ -793,6 +793,24 @@
         "https://i.dummyjson.com/data/products/43/4.jpg",
         "https://i.dummyjson.com/data/products/43/thumbnail.jpg"
       ]
+    },
+    {
+      "id": "c1e9",
+      "title": "New Product 1 edit",
+      "description": "New Product arrive",
+      "brand": "Infinix",
+      "category": "smartphones",
+      "price": 232,
+      "discountPercentage": 17,
+      "stock": 62,
+      "thumbnail": "Nostrum nisi quae er",
+      "images": [
+        "Ea ut sit doloribus ",
+        "Tempor necessitatibu",
+        "Dolore explicabo No",
+        "Nostrum nisi quae er"
+      ],
+      "rating": 0
     }
   ],
   "categories": [

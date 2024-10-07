@@ -50,7 +50,7 @@ const Navbar = ({ children }) => {
   useEffect(()=>{
     dispatch(getCartItemByUserIdAsync(loginuser?.id))
   },[dispatch, loginuser?.id])
-  console.log('login user navbar', loginuser)
+  // console.log('login user navbar', loginuser)
   // console.log('selectCartItem',selectedCartItem)
   
   return (

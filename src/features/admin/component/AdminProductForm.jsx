@@ -1,9 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { fetchProductByIdAsync, selectAllBrands, selectAllCategories, selectedProduct } from '../../product-list/ProductSlice';
-
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import {
+  createProductAsync,
+  fetchProductByIdAsync,
+  selectAllBrands,
+  selectAllCategories,
+  selectedProduct,
+  updateProductAsync,
+} from "../../product-list/ProductSlice";
 
 function AdminProductForm() {
   const {
@@ -20,37 +26,59 @@ function AdminProductForm() {
   const selectedProductById = useSelector(selectedProduct);
   console.log('selectedProductById admin form', selectedProductById)
 
-  useEffect(()=>{
-    dispatch(fetchProductByIdAsync(params?.id))
-
-  },[])
-
-
+  useEffect(() => {
+    dispatch(fetchProductByIdAsync(params?.id));
+  }, [dispatch, params?.id]);
 
   useEffect(() => {
     if (selectedProductById && params.id) {
-      setValue('title', selectedProductById[0]?.title);
-      setValue('description', selectedProductById[0]?.description);
-      setValue('price', selectedProductById[0]?.price);
-      setValue('discountPercentage', selectedProductById[0]?.discountPercentage);
-      setValue('thumbnail', selectedProductById[0]?.thumbnail);
-      setValue('stock', selectedProductById[0]?.stock);
-      setValue('image1', selectedProductById[0]?.images[0]);
-      setValue('image2', selectedProductById[0]?.images[1]);
-      setValue('image3', selectedProductById[0]?.images[2]);
-      setValue('brand', selectedProductById[0]?.brand);
-      setValue('category', selectedProductById[0]?.category);
+      setValue("title", selectedProductById[0]?.title);
+      setValue("description", selectedProductById[0]?.description);
+      setValue("price", selectedProductById[0]?.price);
+      setValue(
+        "discountPercentage",
+        selectedProductById[0]?.discountPercentage
+      );
+      setValue("thumbnail", selectedProductById[0]?.thumbnail);
+      setValue("stock", selectedProductById[0]?.stock);
+      setValue("image1", selectedProductById[0]?.images[0]);
+      setValue("image2", selectedProductById[0]?.images[1]);
+      setValue("image3", selectedProductById[0]?.images[2]);
+      setValue("brand", selectedProductById[0]?.brand);
+      setValue("category", selectedProductById[0]?.category);
     }
   }, [selectedProductById, params.id, setValue]);
-
-
 
   return (
     <form
       noValidate
       onSubmit={handleSubmit((data) => {
-        console.log(data);
-       
+        const product = { ...data };
+        product.images = [
+          product.image1,
+          product.image2,
+          product.image3,
+          product.thumbnail,
+        ];
+        product.rating = 0;
+        delete product["image1"];
+        delete product["image2"];
+        delete product["image3"];
+        product.price = +product?.price;
+        product.stock = +product?.stock;
+        product.discountPercentage = +product?.discountPercentage;
+        console.log("form product", product);
+
+        if (params.id) {
+          product.id = params.id;
+          product.rating = selectedProduct.rating || 0;
+          dispatch(updateProductAsync(product));
+          reset();
+        } else {
+          dispatch(createProductAsync(product));
+          reset();
+          //TODO:  on product successfully added clear fields and show a message
+        }
       })}
     >
       <div className="space-y-12 bg-white p-12">
@@ -71,8 +99,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="text"
-                    {...register('title', {
-                      required: 'name is required',
+                    {...register("title", {
+                      required: "name is required",
                     })}
                     id="title"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -91,12 +119,12 @@ function AdminProductForm() {
               <div className="mt-2">
                 <textarea
                   id="description"
-                  {...register('description', {
-                    required: 'description is required',
+                  {...register("description", {
+                    required: "description is required",
                   })}
                   rows={3}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={''}
+                  defaultValue={""}
                 />
               </div>
               <p className="mt-3 text-sm leading-6 text-gray-600">
@@ -113,8 +141,8 @@ function AdminProductForm() {
               </label>
               <div className="mt-2">
                 <select
-                  {...register('brand', {
-                    required: 'brand is required',
+                  {...register("brand", {
+                    required: "brand is required",
                   })}
                 >
                   <option value="">--choose brand--</option>
@@ -134,8 +162,8 @@ function AdminProductForm() {
               </label>
               <div className="mt-2">
                 <select
-                  {...register('category', {
-                    required: 'category is required',
+                  {...register("category", {
+                    required: "category is required",
                   })}
                 >
                   <option value="">--choose category--</option>
@@ -157,8 +185,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="number"
-                    {...register('price', {
-                      required: 'price is required',
+                    {...register("price", {
+                      required: "price is required",
                       min: 1,
                       max: 10000,
                     })}
@@ -180,8 +208,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="number"
-                    {...register('discountPercentage', {
-                      required: 'discountPercentage is required',
+                    {...register("discountPercentage", {
+                      required: "discountPercentage is required",
                       min: 0,
                       max: 100,
                     })}
@@ -203,8 +231,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="number"
-                    {...register('stock', {
-                      required: 'stock is required',
+                    {...register("stock", {
+                      required: "stock is required",
                       min: 0,
                     })}
                     id="stock"
@@ -225,8 +253,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="text"
-                    {...register('thumbnail', {
-                      required: 'thumbnail is required',
+                    {...register("thumbnail", {
+                      required: "thumbnail is required",
                     })}
                     id="thumbnail"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -246,8 +274,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="text"
-                    {...register('image1', {
-                      required: 'image1 is required',
+                    {...register("image1", {
+                      required: "image1 is required",
                     })}
                     id="image1"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -267,8 +295,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="text"
-                    {...register('image2', {
-                      required: 'image is required',
+                    {...register("image2", {
+                      required: "image is required",
                     })}
                     id="image2"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -288,8 +316,8 @@ function AdminProductForm() {
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
                   <input
                     type="text"
-                    {...register('image3', {
-                      required: 'image is required',
+                    {...register("image3", {
+                      required: "image is required",
                     })}
                     id="image3"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -302,7 +330,7 @@ function AdminProductForm() {
 
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Extra{' '}
+            Extra{" "}
           </h2>
 
           <div className="mt-10 space-y-10">
@@ -388,11 +416,11 @@ function AdminProductForm() {
           Cancel
         </button>
 
-       {selectedProductById && <button
-          className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Delete
-        </button>}
+        {selectedProductById.length ? (
+          <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Delete
+          </button>
+        ) : <div></div>}
 
         <button
           type="submit"
@@ -405,4 +433,4 @@ function AdminProductForm() {
   );
 }
 
-export  default AdminProductForm;
+export default AdminProductForm;

@@ -10,7 +10,7 @@ export default function Signup() {
   const loginuser=useSelector(selectedLoggedInUser)
 
 const {register, handleSubmit, formState:{errors}} =useForm()
-console.log('signup loginuser', loginuser)
+// console.log('signup loginuser', loginuser)
 
   return (
     <>
@@ -30,7 +30,7 @@ console.log('signup loginuser', loginuser)
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" onSubmit={handleSubmit((data)=>{
             // console.log('signup data', data)
-            dispatch(createUserAsync({email: data.email, password: data.password, addresses:[] }))
+            dispatch(createUserAsync({email: data.email, password: data.password, addresses:[],role:'user' }))
           })}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">

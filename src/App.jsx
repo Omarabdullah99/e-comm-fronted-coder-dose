@@ -22,6 +22,8 @@ import MyOrders from './features/user/component/MyOrders'
 import MyProfilePage from './page/MyProfilePage'
 import Logout from './features/auth/component/LogOut'
 import ForgotPassword from './features/auth/component/ForgotPassword'
+import AdminHome from './page/AdminHome'
+import { ProtectedAdmin } from './features/auth/component/ProtectedAdmin'
 
 
 const router = createBrowserRouter([
@@ -71,6 +73,14 @@ const router = createBrowserRouter([
     path: '/forgot-password',
     element: <ForgotPassword></ForgotPassword>,
   },
+    //user path link end
+
+    //admin path link start
+    {
+      path: '/admin',
+      element: <ProtectedAdmin><AdminHome></AdminHome></ProtectedAdmin>,
+    },
+      
   {
     path: '*',
     element: <PageNotFound></PageNotFound>,

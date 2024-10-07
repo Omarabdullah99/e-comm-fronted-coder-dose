@@ -1122,6 +1122,13 @@
           "gpo": "1234"
         }
       ]
+    },
+    {
+      "id": "38a7",
+      "email": "admin@gmail.com",
+      "password": "asdf",
+      "addresses": [],
+      "role": "admin"
     }
   ],
   "carts": [

@@ -14,6 +14,7 @@ import { useState } from "react";
 import { createOrderAsync, selectCurrentOrder } from "../features/orders/orderSlice";
 import { discountedPrice } from "../app/constants";
 import Footer from "../features/common/Footer";
+import Modal from "../features/common/Modal";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function Checkout() {
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [openModal, setOpenModal] = useState(null);
 
   const user = useSelector(selectedLoggedInUser);
   // console.log('user',user)
@@ -47,8 +49,7 @@ function Checkout() {
     dispatch(updateCartItemAsync({ ...product, quantity: +e.target.value }));
   };
 
-  const handleRemove = (e, id) => {
-    e.preventDefault();
+  const handleRemove = ( id) => {
     // console.log('id', id)
     dispatch(deleteCartItemAsync(id));
   };
@@ -437,8 +438,19 @@ function Checkout() {
                             </div>
 
                             <div className="flex">
+                              <Modal 
+                              title={`Delete ${product.title}`}
+                              message="Are you sure you want to delete this Cart item?"
+                              dangerOption="Delete"
+                              cancelOption="Cancel"
+                              dangerAction={() => handleRemove(product.id)} // e পাস করো
+                              cancelAction={() => setOpenModal(null)}
+                              showModal={openModal === product.id}
+                              />
                               <button
-                                onClick={(e) => handleRemove(e, product.id)}
+                                 onClick={(e) => {
+                                  setOpenModal(product.id);
+                                }}
                                 type="button"
                                 className="font-medium text-indigo-600 hover:text-indigo-500"
                               >

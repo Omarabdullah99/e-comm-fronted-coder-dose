@@ -136,6 +136,7 @@ const initialState = {
   });
 
    export const selectAllProducts = (state) => state.product.products;
+   export const selectProductStatus=(state)=> state.product.status
    export const selectAllCategories= (state) => state.product.categories
    export const selectAllBrands= (state)=> state.product.brands
    export const selectedProduct=(state)=> state.product.selectedProduct

@@ -7,14 +7,16 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
 } from '@heroicons/react/24/outline';
-import { fetchAllOrdersAsync, selectAllOrders, updateOrderAsync } from '../../orders/orderSlice';
+import { fetchAllOrdersAsync, selectAllOrders, selectOrderStatus, updateOrderAsync } from '../../orders/orderSlice';
 import { discountedPrice } from '../../../app/constants';
+import { TailSpin } from 'react-loader-spinner';
 
 function AdminOrders() {
 
   const dispatch = useDispatch();
   const orders = useSelector(selectAllOrders);
-//   console.log('seletctallorders',orders)
+  //   console.log('seletctallorders',orders)
+  const orderStatus=useSelector(selectOrderStatus)
   const [editableOrderId, setEditableOrderId] = useState(-1);
 
   const handleEdit = (order) => {
@@ -53,6 +55,25 @@ function AdminOrders() {
   useEffect(() => {
     dispatch(fetchAllOrdersAsync());
   }, [dispatch]);
+
+  if (orderStatus == 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-5xl">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      </div>
+    ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  }
 
   return (
     <div className="overflow-x-auto">

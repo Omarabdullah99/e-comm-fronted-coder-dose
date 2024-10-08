@@ -81,7 +81,7 @@ export const cartSlice = createSlice({
             state.item[index]= action.payload
         })
         .addCase(deleteCartItemAsync.pending,(state)=>{
-            state.status='pending'
+            state.status='loading'
         })
         .addCase(deleteCartItemAsync.fulfilled, (state,action)=>{
             state.status='fulfilled';
@@ -101,4 +101,5 @@ export const cartSlice = createSlice({
     }
 })
 export const selectedCartItemByUserId=(state)=> state.cart.item
+export const selectedCartStatus=(state)=> state.cart.status
 export default cartSlice.reducer

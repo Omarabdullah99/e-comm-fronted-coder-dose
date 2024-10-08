@@ -36,7 +36,10 @@ import {
   fetchAllCategoriesAsync,
   fetchAllBrandsAsync,
   selectAllBrands,
+  selectProductStatus,
 } from "../../product-list/ProductSlice";
+import { TailSpin } from "react-loader-spinner";
+
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -51,6 +54,9 @@ function classNames(...classes) {
 const AdminProducList = () => {
   const products = useSelector(selectAllProducts);
   const dispatch = useDispatch();
+  const productStatus=useSelector(selectProductStatus)
+
+
 
   useEffect(() => {
     if (!products.length) {
@@ -114,6 +120,26 @@ const AdminProducList = () => {
   useEffect(() => {
     dispatch(fetchProductsByFiltersAsync({ filter, sort }));
   }, [dispatch, filter, sort]);
+
+  
+  if (productStatus == 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-5xl">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      </div>
+    ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  }
 
   return (
     <div className="bg-white">

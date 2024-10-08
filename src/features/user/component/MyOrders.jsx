@@ -1,20 +1,46 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedLoggedInUser } from "../../auth/authSlice";
-import { fetchOrdersByUserIdAsync, selectedUserOrders } from "../userSlice";
+import { fetchOrdersByUserIdAsync, selectedUserOrders, selectUserStatus } from "../userSlice";
 import { discountedPrice } from "../../../app/constants";
 import Navbar from "../../navbar/Navbar";
 import Footer from "../../common/Footer";
+import { Grid, TailSpin } from "react-loader-spinner";
+
 
 const MyOrders = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectedLoggedInUser);
   const userOrders = useSelector(selectedUserOrders);
   // console.log('myorders',userOrders)
+  const userStatus=useSelector(selectUserStatus)
+
 
   useEffect(() => {
     dispatch(fetchOrdersByUserIdAsync(user?.id));
   }, [dispatch, user?.id]);
+
+
+  if (userStatus == 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-5xl">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      </div>
+    ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  }
+
+ 
 
   return (
 

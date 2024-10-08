@@ -2,9 +2,10 @@ import React, { useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link, Navigate } from 'react-router-dom';
-import { deleteCartItemAsync, selectedCartItemByUserId, updateCartItemAsync } from './cartSlice';
+import { deleteCartItemAsync, selectedCartItemByUserId, selectedCartStatus, updateCartItemAsync } from './cartSlice';
 import { discountedPrice } from '../../app/constants';
 import Footer from '../common/Footer';
+import { TailSpin } from 'react-loader-spinner';
 
 
 
@@ -12,6 +13,8 @@ export default function Cart() {
   const dispatch=useDispatch()
   const products=useSelector(selectedCartItemByUserId)
   // console.log('item', products)
+  const cartStatus= useSelector(selectedCartStatus)
+  console.log('cartstaus',cartStatus)
   const totalAmount = products?.reduce((amount, item)=>discountedPrice(item)*item.quantity +amount,0)
   const totalItems = products?.reduce((total, item)=>item.quantity + total,0)
   const [open, setOpen] = useState(true);
@@ -28,6 +31,26 @@ export default function Cart() {
     dispatch(deleteCartItemAsync(id))
 
   }
+
+  if (cartStatus == 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-5xl">
+          <TailSpin
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      </div>
+    ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  }
+
   return (
     <>
     {!products?.length && <Navigate to={'/'} replace='true'></Navigate>}

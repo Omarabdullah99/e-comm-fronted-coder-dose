@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { createOrderAsync, selectCurrentOrder } from "../features/orders/orderSlice";
 import { discountedPrice } from "../app/constants";
+import Footer from "../features/common/Footer";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -486,6 +487,9 @@ function Checkout() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-5">
+        <Footer></Footer>
       </div>
     </>
   );

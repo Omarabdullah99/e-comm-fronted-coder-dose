@@ -8,6 +8,7 @@ import { Link, useParams } from 'react-router-dom'
 import { selectedLoggedInUser } from '../auth/authSlice'
 import { createCartByAsync, selectedCartItemByUserId } from '../cart/cartSlice'
 import { discountedPrice } from '../../app/constants'
+import { useAlert } from 'react-alert'
 
 
 
@@ -46,6 +47,7 @@ const ProductDetails = () => {
     const [selectedSize, setSelectedSize] = useState(sizes[2])
     const params= useParams()
     const dispatch=useDispatch()
+    const alert=useAlert()
     const user= useSelector(selectedLoggedInUser)
     useEffect(()=>{
       dispatch(fetchProductByIdAsync(params?.id))
@@ -66,12 +68,14 @@ const ProductDetails = () => {
      e.preventDefault();
      if (selectedCardByUserId.findIndex((item) => item.id === product.id) < 0) {
       dispatch(createCartByAsync({...product, quantity:1, user:user?.id}))
+       //this message will provide backend
+      alert.show('Cart Add Successfully!')
      }
      else{
-      console.log('cart already added')
+      //this message will provide backend
+      alert.error('This item already added!')
      }
      
-
   }
 
   return (

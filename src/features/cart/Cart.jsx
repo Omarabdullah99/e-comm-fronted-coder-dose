@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { deleteCartItemAsync, selectedCartItemByUserId, updateCartItemAsync } from './cartSlice';
 import { discountedPrice } from '../../app/constants';
+import Footer from '../common/Footer';
 
 
 
@@ -131,6 +132,9 @@ export default function Cart() {
             </div>
           </div>
         </div>
+      </div>
+      <div className='mt-5'>
+        <Footer></Footer>
       </div>
     </>
   );

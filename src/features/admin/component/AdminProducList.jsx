@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  fetchAllProductsAsync,
+  
   selectAllProducts,
   fetchProductsByFiltersAsync,
   selectAllCategories,
@@ -58,11 +58,7 @@ const AdminProducList = () => {
 
 
 
-  useEffect(() => {
-    if (!products.length) {
-      dispatch(fetchAllProductsAsync());
-    }
-  }, [dispatch, products.length]);
+
 
   useEffect(() => {
     dispatch(fetchAllCategoriesAsync());

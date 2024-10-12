@@ -64,7 +64,7 @@ const ProductList = () => {
   const categories = useSelector(selectAllCategories);
   const brands = useSelector(selectAllBrands);
   const totalItems = useSelector(selectTotalItems);
-  console.log("total items", totalItems);
+  // console.log("total items", totalItems);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 

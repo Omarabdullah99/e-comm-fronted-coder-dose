@@ -1,11 +1,12 @@
 export function createUser(userData){
     return new Promise(async(resolve)=>{
-        const response = await fetch('http://localhost:8000/users', {
+        const response = await fetch('http://localhost:8000/auth/signup', {
             method: 'POST',
             body: JSON.stringify(userData),
             headers: { 'content-type': 'application/json' },
           });
           const data = await response.json();
+          console.log('sign up data of authapi',data)
           // TODO: on server it will only return some info of user (not password)
           resolve({ data });
 
@@ -28,20 +29,24 @@ export function updateUser(update){
 
 export function checkUser(loginInfo) {
     return new Promise(async (resolve, reject) => {
-      const email = loginInfo.email;
-      const password = loginInfo.password;
-      const response = await fetch('http://localhost:8000/users?email=' + email);
-      const data = await response.json();
-      if (data.length) {
-        if (password === data[0].password) {
-          resolve({ data: data[0] });
+      try {
+        const response = await fetch('http://localhost:8000/auth/login', {
+          method: 'POST',
+          body: JSON.stringify(loginInfo),
+          headers: { 'content-type': 'application/json' },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log('login data of authapi',data)
+          resolve({ data });
         } else {
-          reject({ message: 'wrong credentials' });
+          const error = await response.text();
+          // console.log('login error of authapi',error)
+          reject(error);
         }
-      } else {
-        reject({ message: 'user not found' });
+      } catch (error) {
+        reject( error );
       }
-      // TODO: on server it will only return some info of user (not password)
     });
   }
 

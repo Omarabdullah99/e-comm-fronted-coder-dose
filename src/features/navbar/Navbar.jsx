@@ -45,6 +45,7 @@ function classNames(...classes) {
 
 const Navbar = ({ children }) => {
   const loginuser=useSelector(selectedLoggedInUser)
+  // console.log('check login user',loginuser)
   const selectedCartItem= useSelector(selectedCartItemByUserId)
   const dispatch=useDispatch()
 

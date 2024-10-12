@@ -97,7 +97,7 @@ const initialState = {
           state.status = 'idle';
           state.products = action.payload.products;
           state.totalItems = action.payload.totalItems;
-          console.log('slice check',action.payload.totalItems)
+          // console.log('slice check',action.payload.totalItems)
         })
         .addCase(fetchAllCategoriesAsync.pending, (state)=>{
           state.status= 'loading'

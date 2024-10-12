@@ -52,7 +52,7 @@ const ProductDetails = () => {
 
   const productById = useSelector(selectedProduct);
   const selectedCardByUserId = useSelector(selectedCartItemByUserId);
-  // console.log('useridcart check',selectedCardByUserId)
+  console.log('useridcart check',selectedCardByUserId)
   if (!productById) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -72,13 +72,13 @@ const ProductDetails = () => {
     ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
   }
 
-  const product = productById[0];
-  // console.log('detil product',product)
+  const product = productById;
+  console.log('detil product',product)
 
   const handleCart = (e) => {
     e.preventDefault();
-    if (selectedCardByUserId.findIndex((item) => item.id === product.id) < 0) {
-      dispatch(createCartByAsync({ ...product, quantity: 1, user: user?.id }));
+    if (selectedCardByUserId.findIndex((item) => item.product.id === product.id) < 0) {
+      dispatch(createCartByAsync({ product:product.id, quantity: 1, user: user?.id }));
       //this message will provide backend
       alert.show("Cart Add Successfully!");
     } else {
@@ -96,27 +96,27 @@ const ProductDetails = () => {
             <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
               <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
                 <img
-                  src={productById[0].images[0]}
+                  src={productById.images[0]}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
               <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                   <img
-                    src={productById[0].images[1]}
+                    src={productById.images[1]}
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                   <img
-                    src={productById[0].images[2]}
+                    src={productById.images[2]}
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
               </div>
               <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
                 <img
-                  src={productById[0].images[3]}
+                  src={productById.images[3]}
                   className="h-full w-full object-cover object-center"
                 />
               </div>

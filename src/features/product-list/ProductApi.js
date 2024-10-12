@@ -41,7 +41,7 @@ export function fetchProductById(productId) {
   return new Promise(async (resolve) => {
     const id = productId;
 
-    const respose = await fetch("http://localhost:8000/products?id=" + id);
+    const respose = await fetch("http://localhost:8000/products/" + id);
     const data = await respose.json();
 
     resolve({ data });

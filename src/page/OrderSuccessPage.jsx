@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { selectedLoggedInUser } from '../features/auth/authSlice'
 import { resetCartAsync } from '../features/cart/cartSlice'
-import { resetOrder } from '../features/orders/orderSlice'
+import { resetOrder, selectCurrentOrder } from '../features/orders/orderSlice'
 
 const OrderSuccessPage = () => {
     const params=useParams()
     // console.log('successpage', params)
     const dispatch=useDispatch()
     const user=useSelector(selectedLoggedInUser)
+    const currentOrder=useSelector(selectCurrentOrder)
+    console.log('current order check',currentOrder)
     useEffect(()=>{
-      //resetCart
-      dispatch(resetCartAsync(user?.id))
       //resetCurrentOrder
-      dispatch(resetOrder)
-    },[dispatch, user?.id])
+      dispatch(resetOrder())
+    },[dispatch])
   return (
     <>
     {!params.id &&  <Navigate to='/' replace={true}></Navigate>}

@@ -47,7 +47,7 @@ function Checkout() {
   const userDetailsById=useSelector(selectedUserDetails)
   console.log('userByIdDetails',userDetailsById)
   const currentOrder=useSelector(selectCurrentOrder)
-  // console.log('currentOrder checkoutpage.jsx',currentOrder)
+  console.log('currentOrder checkoutpage.jsx',currentOrder)
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync(user?.id))
@@ -67,7 +67,7 @@ function Checkout() {
 
   const handleAddress = (e) => {
     // console.log(e.target.value)
-    setSelectedAddress(user?.addresses[e.target.value]);
+    setSelectedAddress(userDetailsById?.addresses[e.target.value]);
   };
 
   const handlePayment = (e) => {
@@ -77,8 +77,16 @@ function Checkout() {
 
   const handleOrder=()=>{
     if(selectedAddress && paymentMethod){
-      const order= {products,totalAmount, totalItems, user, paymentMethod, selectedAddress,status:'pending'}
-       // console.log('order click',order)
+      const order = {
+        items: products, // Rename to 'items' to match backend expectation
+        totalAmount,
+        totalItems,
+        user: user.id, // Ensure this is the user ID, not the full user object
+        paymentMethod,
+        selectedAddress,
+        status: 'pending',
+      };
+      //  console.log('order click',order)
     dispatch(createOrderAsync(order))
 
     }else{

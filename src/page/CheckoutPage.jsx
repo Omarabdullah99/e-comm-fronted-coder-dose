@@ -7,10 +7,12 @@ import {
 } from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
 import {
+  fetchUserByIdAsync,
   selectedLoggedInUser,
+  selectedUserDetails,
   updateUserAsync,
 } from "../features/auth/authSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createOrderAsync, selectCurrentOrder } from "../features/orders/orderSlice";
 import { discountedPrice } from "../app/constants";
 import Footer from "../features/common/Footer";
@@ -19,7 +21,7 @@ import Modal from "../features/common/Modal";
 function Checkout() {
   const dispatch = useDispatch();
   const products = useSelector(selectedCartItemByUserId);
-  console.log('cart item by userid',products)
+  // console.log('cart item by userid',products)
   const {
     register,
     handleSubmit,
@@ -41,9 +43,16 @@ function Checkout() {
   const [openModal, setOpenModal] = useState(null);
 
   const user = useSelector(selectedLoggedInUser);
-  // console.log('user',user)
+  // console.log('Login user',user)
+  const userDetailsById=useSelector(selectedUserDetails)
+  console.log('userByIdDetails',userDetailsById)
   const currentOrder=useSelector(selectCurrentOrder)
   // console.log('currentOrder checkoutpage.jsx',currentOrder)
+
+  useEffect(() => {
+    dispatch(fetchUserByIdAsync(user?.id))
+  }, [user?.id])
+  
   const handleQuantity = (e, product) => {
     e.preventDefault();
     const quantity = Number(e.target.value);
@@ -90,11 +99,11 @@ function Checkout() {
             <form
               className="bg-white px-5 py-12 mt-12"
               onSubmit={handleSubmit((data) => {
-                // console.log('address', data)
+                console.log('address for CheckoutPage.jsx', data)
                 dispatch(
                   updateUserAsync({
-                    ...user,
-                    addresses: [...user?.addresses, data],
+                    ...userDetailsById,
+                    addresses: [data],
                   })
                 );
                 reset();
@@ -302,7 +311,7 @@ function Checkout() {
                     Choose from Existing addresses
                   </p>
                   <ul className="mt-3" role="list">
-                    {user?.addresses?.map((address, index) => (
+                    {userDetailsById?.addresses?.map((address, index) => (
                       <li
                         key={index}
                         className="flex justify-between items-center gap-x-6 px-5 py-5 border-solid border-2 border-gray-200 mb-2"

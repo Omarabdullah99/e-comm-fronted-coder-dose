@@ -13,10 +13,17 @@ export function createUser(userData){
     })
 }
 
-export function updateUser(update){
-  // console.log('auth api update user',update)
+export function fetchUserById(userId){
   return new Promise(async(resolve)=>{
-    const response= await fetch('http://localhost:8000/users/'+update.id,{
+    const response= await fetch('http://localhost:8000/user/'+userId)
+    const data= await response.json()
+    resolve({data})
+  })
+}
+export function updateUser(update){
+  console.log('auth api update user',update)
+  return new Promise(async(resolve)=>{
+    const response= await fetch('http://localhost:8000/user/'+update.id,{
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },

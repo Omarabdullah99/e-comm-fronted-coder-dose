@@ -46,8 +46,9 @@ function Checkout() {
   // console.log('currentOrder checkoutpage.jsx',currentOrder)
   const handleQuantity = (e, product) => {
     e.preventDefault();
+    const quantity = Number(e.target.value);
     // console.log('value', e.target.value)
-    dispatch(updateCartItemAsync({ ...product, quantity: +e.target.value }));
+    dispatch(updateCartItemAsync({ id: product.id, quantity, product: product.product.id }));
   };
 
   const handleRemove = ( id) => {
@@ -444,13 +445,13 @@ function Checkout() {
                               message="Are you sure you want to delete this Cart item?"
                               dangerOption="Delete"
                               cancelOption="Cancel"
-                              dangerAction={() => handleRemove(product?.product?.id)} // e পাস করো
+                              dangerAction={() => handleRemove(product?.id)} // e পাস করো
                               cancelAction={() => setOpenModal(null)}
-                              showModal={openModal === product?.product?.id}
+                              showModal={openModal === product?.id}
                               />
                               <button
                                  onClick={(e) => {
-                                  setOpenModal(product?.product?.id);
+                                  setOpenModal(product?.id);
                                 }}
                                 type="button"
                                 className="font-medium text-indigo-600 hover:text-indigo-500"

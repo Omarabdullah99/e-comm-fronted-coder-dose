@@ -24,9 +24,10 @@ export function getCartItemByUserId(userId){
 }
 
 export function updateCartItem(update){
+    console.log('cart api update', update)
     return new Promise(async(resolve)=>{
         // console.log('update item api', update)
-        const response= await fetch('http://localhost:8000/carts/'+update.id,{
+        const response= await fetch('http://localhost:8000/cart/'+update.id,{
             method: 'PATCH',
             body: JSON.stringify(update),
             headers: {'content-type': 'application/json'}
@@ -38,7 +39,7 @@ export function updateCartItem(update){
 
 export function deleteCart(itemid){
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/carts/'+itemid,{
+        const response= await fetch('http://localhost:8000/cart/'+itemid,{
             method: 'DELETE',
             headers: {'content-type': 'application/json'}
         })

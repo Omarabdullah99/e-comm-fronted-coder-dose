@@ -78,7 +78,9 @@ export const cartSlice = createSlice({
             const index= state.item.findIndex(item => item.id === action.payload.id)
             // console.log('finde index slice.jsx', index)
             // console.log('action slice.jsx', action.payload)
-            state.item[index]= action.payload
+            if (index !== -1) {
+                state.item[index] = action.payload;
+            }
         })
         .addCase(deleteCartItemAsync.pending,(state)=>{
             state.status='loading'

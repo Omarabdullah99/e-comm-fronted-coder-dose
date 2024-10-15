@@ -25,7 +25,7 @@ function AdminProductForm() {
   const params = useParams();
   const selectedProductById = useSelector(selectedProduct);
   console.log('selectedProductById admin form', selectedProductById)
-  console.log('params id', params.id)
+  // console.log('params id', params.id)
 
   useEffect(() => {
     if(params.id){
@@ -35,20 +35,20 @@ function AdminProductForm() {
 
   useEffect(() => {
     if (selectedProductById && params.id) {
-      setValue("title", selectedProductById[0]?.title);
-      setValue("description", selectedProductById[0]?.description);
-      setValue("price", selectedProductById[0]?.price);
+      setValue("title", selectedProductById?.title);
+      setValue("description", selectedProductById?.description);
+      setValue("price", selectedProductById?.price);
       setValue(
         "discountPercentage",
-        selectedProductById[0]?.discountPercentage
+        selectedProductById?.discountPercentage
       );
-      setValue("thumbnail", selectedProductById[0]?.thumbnail);
-      setValue("stock", selectedProductById[0]?.stock);
-      setValue("image1", selectedProductById[0]?.images[0]);
-      setValue("image2", selectedProductById[0]?.images[1]);
-      setValue("image3", selectedProductById[0]?.images[2]);
-      setValue("brand", selectedProductById[0]?.brand);
-      setValue("category", selectedProductById[0]?.category);
+      setValue("thumbnail", selectedProductById?.thumbnail);
+      setValue("stock", selectedProductById?.stock);
+      setValue("image1", selectedProductById?.images[0]);
+      setValue("image2", selectedProductById?.images[1]);
+      setValue("image3", selectedProductById?.images[2]);
+      setValue("brand", selectedProductById?.brand);
+      setValue("category", selectedProductById?.category);
     }
   }, [selectedProductById, params.id, setValue]);
 
@@ -191,7 +191,7 @@ function AdminProductForm() {
                     {...register("price", {
                       required: "price is required",
                       min: 1,
-                      max: 10000,
+                      max: 100000,
                     })}
                     id="price"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"

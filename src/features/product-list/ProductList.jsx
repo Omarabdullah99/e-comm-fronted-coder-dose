@@ -83,7 +83,6 @@ const ProductList = () => {
     },
   ];
 
-  console.log(filters);
 
   // ------------------get filter show dynamic end-----------------
 

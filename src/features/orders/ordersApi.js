@@ -28,7 +28,7 @@ export function updateOrder(order){
 
 export function fetchAllOrders(){
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/orders')
+        const response= await fetch('http://localhost:8000/order')
         const data= await response.json()
         resolve({data})
     })

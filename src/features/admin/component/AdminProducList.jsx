@@ -82,7 +82,7 @@ const AdminProducList = () => {
     },
   ];
 
-  console.log("filters", filters);
+  // console.log("filters", filters);
 
   // ------------------get filter show dynamic end-----------------
 

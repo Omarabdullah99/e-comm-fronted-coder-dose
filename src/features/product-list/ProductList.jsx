@@ -83,6 +83,8 @@ const ProductList = () => {
     },
   ];
 
+  console.log(filters);
+
   // ------------------get filter show dynamic end-----------------
 
   //  categories and brands filter function start

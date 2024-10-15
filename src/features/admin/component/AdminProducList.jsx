@@ -29,7 +29,6 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  
   selectAllProducts,
   fetchProductsByFiltersAsync,
   selectAllCategories,
@@ -37,9 +36,9 @@ import {
   fetchAllBrandsAsync,
   selectAllBrands,
   selectProductStatus,
+  selectTotalItems,
 } from "../../product-list/ProductSlice";
 import { TailSpin } from "react-loader-spinner";
-
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -54,11 +53,7 @@ function classNames(...classes) {
 const AdminProducList = () => {
   const products = useSelector(selectAllProducts);
   const dispatch = useDispatch();
-  const productStatus=useSelector(selectProductStatus)
-
-
-
-
+  const productStatus = useSelector(selectProductStatus);
 
   useEffect(() => {
     dispatch(fetchAllCategoriesAsync());
@@ -67,6 +62,8 @@ const AdminProducList = () => {
 
   const categories = useSelector(selectAllCategories);
   const brands = useSelector(selectAllBrands);
+  const totalItems = useSelector(selectTotalItems);
+  // console.log(totalItems)
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -85,13 +82,19 @@ const AdminProducList = () => {
     },
   ];
 
+  console.log("filters", filters);
+
   // ------------------get filter show dynamic end-----------------
 
   //  categories and brands filter function start
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const handleFilter = (e, section, option) => {
+    // console.log('3 option', e, section, option)
     const newFilter = { ...filter };
     if (e.target.checked) {
       if (newFilter[section.id]) {
@@ -108,34 +111,44 @@ const AdminProducList = () => {
     setFilter(newFilter);
   };
 
+  // console.log('admin filer', filter)
   const handleSort = (e, option) => {
     const newsort = { _sort: option.sort, _order: option.order };
     setSort(newsort);
   };
 
-  useEffect(() => {
-    dispatch(fetchProductsByFiltersAsync({ filter, sort }));
-  }, [dispatch, filter, sort]);
+  const handlePage = (page) => {
+    console.log({ page });
+    setPage(page);
+  };
 
-  
-  if (productStatus == 'loading') {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-5xl">
-          <TailSpin
-            visible={true}
-            height="80"
-            width="80"
-            color="#4fa94d"
-            ariaLabel="tail-spin-loading"
-            radius="1"
-            wrapperStyle={{}}
-            wrapperClass=""
-          />
-        </div>
-      </div>
-    ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
-  }
+  useEffect(() => {
+    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
+    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
+  }, [dispatch, filter, sort, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [totalItems, sort]);
+
+  // if (productStatus == 'loading') {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen">
+  //       <div className="text-5xl">
+  //         <TailSpin
+  //           visible={true}
+  //           height="80"
+  //           width="80"
+  //           color="#4fa94d"
+  //           ariaLabel="tail-spin-loading"
+  //           radius="1"
+  //           wrapperStyle={{}}
+  //           wrapperClass=""
+  //         />
+  //       </div>
+  //     </div>
+  //   ); // ডেটা ফেচ হওয়ার সময় লোডিং মেসেজ দেখান
+  // }
 
   return (
     <div className="bg-white">
@@ -313,7 +326,6 @@ const AdminProducList = () => {
                           <div key={option.value} className="flex items-center">
                             <input
                               defaultValue={option.value}
-                              defaultChecked={option.checked}
                               id={`filter-${section.id}-${optionIdx}`}
                               name={`${section.id}[]`}
                               type="checkbox"
@@ -336,18 +348,17 @@ const AdminProducList = () => {
 
               {/* Product grid */}
               <div className="lg:col-span-3">
-                
                 {/* This is our Product List */}
                 <div className="bg-white">
                   <div className="mx-auto max-w-2xl  px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                  <div className="mb-5">
-                  <Link
-                    to="/admin/product-form"
-                    className="rounded-md  my-5 bg-green-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Add New Product
-                  </Link>
-                </div>
+                    <div className="mb-5">
+                      <Link
+                        to="/admin/product-form"
+                        className="rounded-md  my-5 bg-green-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        Add New Product
+                      </Link>
+                    </div>
                     <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                       {products?.map((product) => (
                         <div>
@@ -430,51 +441,54 @@ const AdminProducList = () => {
             </div>
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">1</span> to{" "}
-                  <span className="font-medium">10</span> of{" "}
-                  <span className="font-medium">97</span> results
-                </p>
+              <p className="text-sm text-gray-700">
+                    Showing{" "}
+                    <span className="font-medium">
+                      {(page - 1) * ITEMS_PER_PAGE + 1}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-medium">{page * ITEMS_PER_PAGE}</span>{" "}
+                    of <span className="font-medium">{totalItems}</span> results
+                  </p>
               </div>
               <div>
                 <nav
-                  aria-label="Pagination"
                   className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                  aria-label="Pagination"
                 >
-                  <a
-                    href="#"
+                  <div
+                    onClick={(e) => handlePage(page > 1 ? page - 1 : page)}
                     className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                   >
                     <span className="sr-only">Previous</span>
-                    <ChevronLeftIcon aria-hidden="true" className="h-5 w-5" />
-                  </a>
+                    <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                  </div>
                   {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    2
-                  </a>
-                  <a
-                    href="#"
-                    className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
-                  >
-                    3
-                  </a>
-                  <a
-                    href="#"
+
+                  {Array.from({ length: totalPages }).map((el, index) => (
+                    <div
+                      key={index}
+                      onClick={(e) => handlePage(index + 1)}
+                      aria-current="page"
+                      className={`relative cursor-pointer z-10 inline-flex items-center ${
+                        index + 1 === page
+                          ? "bg-indigo-600 text-white"
+                          : "text-gray-400"
+                      } px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                    >
+                      {index + 1}
+                    </div>
+                  ))}
+
+                  <div
+                    onClick={(e) =>
+                      handlePage(page < totalPages ? page + 1 : page)
+                    }
                     className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                   >
                     <span className="sr-only">Next</span>
-                    <ChevronRightIcon aria-hidden="true" className="h-5 w-5" />
-                  </a>
+                    <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                  </div>
                 </nav>
               </div>
             </div>

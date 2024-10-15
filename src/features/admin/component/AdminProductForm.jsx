@@ -25,9 +25,12 @@ function AdminProductForm() {
   const params = useParams();
   const selectedProductById = useSelector(selectedProduct);
   console.log('selectedProductById admin form', selectedProductById)
+  console.log('params id', params.id)
 
   useEffect(() => {
-    dispatch(fetchProductByIdAsync(params?.id));
+    if(params.id){
+      dispatch(fetchProductByIdAsync(params?.id));
+    }
   }, [dispatch, params?.id]);
 
   useEffect(() => {

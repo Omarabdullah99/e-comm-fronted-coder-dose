@@ -26,10 +26,16 @@ export function updateOrder(order){
 
 }
 
-export function fetchAllOrders(){
+export function fetchAllOrders(pagination){
+    //pagination={_page:1, _limit=10}
+    let queryString="";
+    for (let key in pagination){
+        queryString += `${key}=${pagination[key]}&`
+    }
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/order')
+        const response= await fetch('http://localhost:8000/order?' + queryString)
         const data= await response.json()
-        resolve({data})
+        const totalItems= await response.headers.get('X-Total-Count')
+        resolve({data:{orders:data, totalItems: +totalItems}})
     })
 }

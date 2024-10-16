@@ -4,6 +4,7 @@ import { createOrders, fetchAllOrders, updateOrder } from "./ordersApi"
 const initialState={
     status:'idel',
     orders:[],
+    totalItems:0,
     currentOrder:null
 }
 
@@ -25,10 +26,11 @@ export const updateOrderAsync=createAsyncThunk(
 
 export const fetchAllOrdersAsync=createAsyncThunk(
     'order/fetchAllOrders',
-    async()=>{
-        const response= await fetchAllOrders()
+    async(pagination)=>{
+        const response= await fetchAllOrders(pagination)
         return response.data
-    }
+    },
+    
 )
 
 export const ordersSlice= createSlice({
@@ -54,7 +56,8 @@ export const ordersSlice= createSlice({
         })
         .addCase(fetchAllOrdersAsync.fulfilled,(state,action)=>{
             state.status= 'fullfiled'
-            state.orders= action.payload
+            state.orders= action.payload.orders
+            state.totalItems= action.payload.totalItems
         })
         .addCase(updateOrderAsync.pending, (state) => {
             state.status = 'loading';
@@ -72,4 +75,5 @@ export const { resetOrder } = ordersSlice.actions;
 export const selectCurrentOrder=(state)=>state.orders.currentOrder
 export const selectOrderStatus=(state)=>state.orders.status
 export const selectAllOrders=(state)=> state.orders.orders
+export const selectTotalItemOrder=(state)=> state.orders.totalItems
 export default ordersSlice.reducer

@@ -18,11 +18,11 @@ export default function Login() {
   const user = useSelector(selectedLoggedInUser);
   // console.log('user login.jsx',user)
   const Error = useSelector(selectError);
-  // console.log("error check Login.jsx", Error);
+  console.log("error check Login.jsx", Error);
 
   return (
     <>
-      {user && <Navigate to="/" replace={true}></Navigate>}
+      {user?.user && <Navigate to="/" replace={true}></Navigate>}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -99,10 +99,7 @@ export default function Login() {
               </div>
               {Error && (
                 <p className="text-red-500">
-                  {/* Try parsing the error if it's a string */}
-                  {typeof Error === "string"
-                    ? JSON.parse(Error).message
-                    : Error.message}
+                  {Error}
                 </p>
               )}
             </div>

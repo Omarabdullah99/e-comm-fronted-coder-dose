@@ -10,10 +10,30 @@ const initialState={
 
 export const createUserAsync= createAsyncThunk(
     'user/createUser',
-    async(userData)=>{
+    async(userData,{rejectWithValue})=>{
+      try {
         const respose= await createUser(userData)
         return respose.data
+        
+      } catch (error) {
+        return rejectWithValue(error)
+      }
     }
+)
+
+export const checkUserAsync=createAsyncThunk(
+  'user/checkUser',
+  async(loginInfo, {rejectWithValue})=>{
+      try {
+        const response= await checkUser(loginInfo)
+      return response.data
+        
+      } catch (error) {
+        // console.log('login error authslice',error)
+        return rejectWithValue(error)
+        
+      }
+  }
 )
 
 export const fetchUserByIdAsync=createAsyncThunk(
@@ -33,20 +53,7 @@ export const updateUserAsync=createAsyncThunk(
   }
 )
 
-export const checkUserAsync=createAsyncThunk(
-    'user/checkUser',
-    async(loginInfo, {rejectWithValue})=>{
-        try {
-          const response= await checkUser(loginInfo)
-        return response.data
-          
-        } catch (error) {
-          // console.log('login error authslice',error)
-          return rejectWithValue(error)
-          
-        }
-    }
-)
+
 
 export const signOutAsync = createAsyncThunk(
   'user/signOut',
@@ -82,7 +89,10 @@ export const userSlice = createSlice({
             state.status='fullfiled'
             localStorage.setItem('ecommerceProfile', JSON.stringify({ ...action.payload }));
             state.loggedInUser= action.payload
-            console.log("action for signup",action.payload)
+          })
+          .addCase(createUserAsync.rejected, (state,action)=>{
+            state.status='reject'
+            state.error=action.payload
           })
           .addCase(checkUserAsync.pending, (state)=>{
             state.status='loading'

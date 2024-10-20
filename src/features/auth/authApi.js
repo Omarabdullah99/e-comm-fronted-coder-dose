@@ -17,10 +17,16 @@ export function createUser(userData) {
           });
 
           const data = await response.json();
-          console.log('api data',data)
+
+          if (!response.ok) {
+            // ব্যর্থ হলে `reject` করতে হবে
+            return reject(data.message || 'Something went wrong');
+          }
+
           resolve({data});
       } catch (error) {
-          reject(error);
+        
+          reject(error.message);
       }
   });
 }
@@ -42,9 +48,14 @@ export function checkUser(loginInfo) {
           });
 
           const data = await response.json();
+          if (!response.ok) {
+            // ব্যর্থ হলে `reject` করতে হবে
+            return reject(data.message || 'Something went wrong');
+          }
           resolve({data}); //note ei line ta eivabe na likle localstore e set hote problem kore
       } catch (error) {
-          reject(error);
+       
+          reject(error.message);
       }
   });
 }
@@ -57,7 +68,7 @@ export function fetchUserById(userId){
   })
 }
 export function updateUser(update){
-  console.log('auth api update user',update)
+  // console.log('auth api update user',update)
   return new Promise(async(resolve)=>{
     const response= await fetch('http://localhost:8000/user/'+update.id,{
       method: 'PATCH',

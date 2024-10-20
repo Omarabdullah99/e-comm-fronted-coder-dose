@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import {useForm} from 'react-hook-form'
-import { createUserAsync, selectedLoggedInUser } from '../authSlice';
+import { createUserAsync, selectedLoggedInUser, selectError } from '../authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function Signup() {
   const dispatch=useDispatch()
   const loginuser=useSelector(selectedLoggedInUser)
+  const Error=useSelector(selectError)
   console.log('signup loginuser',loginuser)
 
 const {register, handleSubmit, formState:{errors}} =useForm()
@@ -15,7 +16,7 @@ const {register, handleSubmit, formState:{errors}} =useForm()
 
   return (
     <>
-    {loginuser && <Navigate to='/' replace={true}></Navigate>}
+    {loginuser?.user && <Navigate to='/' replace={true}></Navigate>}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
@@ -90,6 +91,12 @@ const {register, handleSubmit, formState:{errors}} =useForm()
                 />
                 {errors?.confirmPassword && (<p className='text-red-500'>{errors?.confirmPassword?.message}</p>)}
               </div>
+
+              {Error && (
+                <p className="text-red-500">
+                  {Error}
+                </p>
+              )}
             </div>
 
             <div>

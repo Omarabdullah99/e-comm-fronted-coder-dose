@@ -60,7 +60,7 @@ const Navbar = ({ children }) => {
 
   useEffect(() => {
     dispatch(fetchUserByIdAsync(loginuser?.user?.id));
-  }, [loginuser?.id]);
+  }, [loginuser?.user?.id]);
 
   useEffect(() => {
     if (loginuser?.user?.id) {

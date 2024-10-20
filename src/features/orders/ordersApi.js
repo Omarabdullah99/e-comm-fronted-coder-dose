@@ -1,6 +1,6 @@
 export function createOrders(order){
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/order',{
+        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/order',{
             method:"POST",
             body:JSON.stringify(order),
             headers: { 'content-type': 'application/json' },
@@ -14,7 +14,7 @@ export function createOrders(order){
 
 export function updateOrder(order){
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/order/'+order.id,{
+        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/order/'+order.id,{
             method:"PATCH",
             body:JSON.stringify(order),
             headers: { 'content-type': 'application/json' },
@@ -33,7 +33,7 @@ export function fetchAllOrders(pagination){
         queryString += `${key}=${pagination[key]}&`
     }
     return new Promise(async(resolve)=>{
-        const response= await fetch('http://localhost:8000/order?' + queryString)
+        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/order?' + queryString)
         const data= await response.json()
         const totalItems= await response.headers.get('X-Total-Count')
         resolve({data:{orders:data, totalItems: +totalItems}})

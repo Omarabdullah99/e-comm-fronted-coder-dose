@@ -12,13 +12,15 @@ const MyOrders = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectedLoggedInUser);
   const userOrders = useSelector(selectedUserOrders);
-  // console.log('myorders',userOrders)
+  console.log('myorders',userOrders)
   const userStatus=useSelector(selectUserStatus)
 
 
   useEffect(() => {
-    dispatch(fetchOrdersByUserIdAsync(user?.id));
-  }, [dispatch, user?.id]);
+    if (user?.user?.id) {
+      dispatch(fetchOrdersByUserIdAsync(user?.user?.id));
+    }
+  }, [dispatch, user?.user?.id]);
 
 
   if (userStatus == 'loading') {

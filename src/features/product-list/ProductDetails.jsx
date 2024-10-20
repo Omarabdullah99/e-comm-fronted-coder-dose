@@ -46,13 +46,14 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
   const user = useSelector(selectedLoggedInUser);
+  // console.log('details user',user)
   useEffect(() => {
     dispatch(fetchProductByIdAsync(params?.id));
   }, [dispatch, params?.id]);
 
   const productById = useSelector(selectedProduct);
   const selectedCardByUserId = useSelector(selectedCartItemByUserId);
-  console.log('useridcart check',selectedCardByUserId)
+  // console.log('useridcart check',selectedCardByUserId)
   if (!productById) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -73,12 +74,12 @@ const ProductDetails = () => {
   }
 
   const product = productById;
-  console.log('detil product',product)
+  // console.log('detil product',product)
 
   const handleCart = (e) => {
     e.preventDefault();
     if (selectedCardByUserId.findIndex((item) => item.product.id === product.id) < 0) {
-      dispatch(createCartByAsync({ product:product.id, quantity: 1, user: user?.id }));
+      dispatch(createCartByAsync({ product:product.id, quantity: 1, user: user?.user?.id }));
       //this message will provide backend
       alert.show("Cart Add Successfully!");
     } else {
@@ -239,7 +240,7 @@ const ProductDetails = () => {
                     </fieldset>
                   </div>
 
-                  {user?.id ? (
+                  {user?.user?.id ? (
                     <button
                       type="submit"
                       className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

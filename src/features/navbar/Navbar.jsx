@@ -14,13 +14,14 @@ import {
   XMarkIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserByIdAsync,
   selectedLoggedInUser,
   selectedUserDetails,
+  setLogout,
 } from "../auth/authSlice";
 import {
   getCartItemByUserIdAsync,
@@ -55,16 +56,23 @@ const Navbar = ({ children }) => {
   // console.log('check login user',loginuser)
   const selectedCartItem = useSelector(selectedCartItemByUserId);
   const dispatch = useDispatch();
+  const navigate=useNavigate()
 
   useEffect(() => {
-    dispatch(fetchUserByIdAsync(loginuser?.id));
+    dispatch(fetchUserByIdAsync(loginuser?.user?.id));
   }, [loginuser?.id]);
 
   useEffect(() => {
-    dispatch(getCartItemByUserIdAsync(loginuser?.id));
-  }, [dispatch, loginuser?.id]);
+    if (loginuser?.user?.id) {
+      dispatch(getCartItemByUserIdAsync(loginuser?.user?.id));
+    }
+  }, [dispatch, loginuser?.user?.id]);
   // console.log('login user navbar', loginuser)
   // console.log('selectCartItem',selectedCartItem)
+  const handleLogOut=()=>{
+    dispatch(setLogout())
+    navigate('/login')
+  }
 
   return (
     <>
@@ -141,12 +149,21 @@ const Navbar = ({ children }) => {
                     >
                       {userNavigation.map((item) => (
                         <MenuItem key={item.name}>
-                          <Link
-                            to={item.link}
-                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                          >
-                            {item.name}
-                          </Link>
+                          {item.name === "Sign out" ? (
+                            <Link
+                              onClick={handleLogOut}
+                              className="block px-4 py-2 text-sm text-gray-700 cursor-pointer data-[focus]:bg-gray-100"
+                            >
+                              {item.name}
+                            </Link>
+                          ) : (
+                            <Link
+                              to={item.link}
+                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                            >
+                              {item.name}
+                            </Link>
+                          )}
                         </MenuItem>
                       ))}
                     </MenuItems>

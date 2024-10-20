@@ -16,7 +16,7 @@ import Modal from "../common/Modal";
 export default function Cart() {
   const dispatch = useDispatch();
   const products = useSelector(selectedCartItemByUserId);
-  console.log('user add to cart', products)
+  // console.log('user add to cart', products)
   const cartStatus = useSelector(selectedCartStatus);
   // console.log("cartstaus", cartStatus);
   const totalAmount = products?.reduce(

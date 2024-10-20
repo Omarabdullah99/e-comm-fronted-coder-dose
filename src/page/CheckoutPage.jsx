@@ -45,13 +45,13 @@ function Checkout() {
   const user = useSelector(selectedLoggedInUser);
   // console.log('Login user',user)
   const userDetailsById=useSelector(selectedUserDetails)
-  console.log('userByIdDetails',userDetailsById)
+  // console.log('userByIdDetails',userDetailsById)
   const currentOrder=useSelector(selectCurrentOrder)
-  console.log('currentOrder checkoutpage.jsx',currentOrder)
+  // console.log('currentOrder checkoutpage.jsx',currentOrder)
 
   useEffect(() => {
-    dispatch(fetchUserByIdAsync(user?.id))
-  }, [user?.id])
+    dispatch(fetchUserByIdAsync(user?.user?.id))
+  }, [user?.user?.id])
   
   const handleQuantity = (e, product) => {
     e.preventDefault();
@@ -81,7 +81,7 @@ function Checkout() {
         items: products, // Rename to 'items' to match backend expectation
         totalAmount,
         totalItems,
-        user: user.id, // Ensure this is the user ID, not the full user object
+        user: user.user.id, // Ensure this is the user ID, not the full user object
         paymentMethod,
         selectedAddress,
         status: 'pending',
@@ -506,7 +506,6 @@ function Checkout() {
                       <button
                         type="button"
                         className="font-medium text-indigo-600 hover:text-indigo-500"
-                        onClick={() => setOpen(false)}
                       >
                         Continue Shopping
                         <span aria-hidden="true"> &rarr;</span>

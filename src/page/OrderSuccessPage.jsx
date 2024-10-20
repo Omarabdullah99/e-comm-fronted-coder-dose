@@ -11,7 +11,7 @@ const OrderSuccessPage = () => {
     const dispatch=useDispatch()
     const user=useSelector(selectedLoggedInUser)
     const currentOrder=useSelector(selectCurrentOrder)
-    console.log('current order check',currentOrder)
+    // console.log('current order check',currentOrder)
     useEffect(()=>{
       //resetCurrentOrder
       dispatch(resetOrder())

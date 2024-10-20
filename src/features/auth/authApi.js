@@ -1,16 +1,52 @@
-export function createUser(userData){
-    return new Promise(async(resolve)=>{
-        const response = await fetch('http://localhost:8000/auth/signup', {
-            method: 'POST',
-            body: JSON.stringify(userData),
-            headers: { 'content-type': 'application/json' },
-          });
-          const data = await response.json();
-          // console.log('sign up data of authapi',data)
-          // TODO: on server it will only return some info of user (not password)
-          resolve({ data });
 
-    })
+// authApi.js
+export function createUser(userData) {
+  return new Promise(async (resolve, reject) => {
+      try {
+          const token = localStorage.getItem('ecommerceProfile') 
+              ? JSON.parse(localStorage.getItem('ecommerceProfile')).token 
+              : null;
+
+          const response = await fetch('http://localhost:8000/auth/signup', {
+              method: 'POST',
+              body: JSON.stringify(userData),
+              headers: { 
+                  'Content-Type': 'application/json',
+                  ...(token && { 'Authorization': `Bearer ${token}` }) // টোকেন যোগ করা হচ্ছে
+              },
+          });
+
+          const data = await response.json();
+          console.log('api data',data)
+          resolve({data});
+      } catch (error) {
+          reject(error);
+      }
+  });
+}
+
+export function checkUser(loginInfo) {
+  return new Promise(async (resolve, reject) => {
+      try {
+          const token = localStorage.getItem('ecommerceProfile') 
+              ? JSON.parse(localStorage.getItem('ecommerceProfile')).token 
+              : null;
+
+          const response = await fetch('http://localhost:8000/auth/login', {
+              method: 'POST',
+              body: JSON.stringify(loginInfo),
+              headers: { 
+                  'Content-Type': 'application/json',
+                  ...(token && { 'Authorization': `Bearer ${token}` }) // টোকেন যোগ করা হচ্ছে
+              },
+          });
+
+          const data = await response.json();
+          resolve({data}); //note ei line ta eivabe na likle localstore e set hote problem kore
+      } catch (error) {
+          reject(error);
+      }
+  });
 }
 
 export function fetchUserById(userId){
@@ -34,28 +70,7 @@ export function updateUser(update){
 
 }
 
-export function checkUser(loginInfo) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch('http://localhost:8000/auth/login', {
-          method: 'POST',
-          body: JSON.stringify(loginInfo),
-          headers: { 'content-type': 'application/json' },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          // console.log('login data of authapi',data)
-          resolve({ data });
-        } else {
-          const error = await response.text();
-          // console.log('login error of authapi',error)
-          reject(error);
-        }
-      } catch (error) {
-        reject( error );
-      }
-    });
-  }
+
 
   export function signOut(userId) {
     return new Promise(async (resolve) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -28,6 +28,7 @@ import AdminProductForm from './features/admin/component/AdminProductForm'
 import AdminOrdersPage from './page/AdminOrdersPage'
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
+import { setUser } from './features/auth/authSlice'
 
 const options = {
   timeout: 5000,
@@ -113,6 +114,16 @@ const router = createBrowserRouter([
 
 
 function App() {
+  const dispatch=useDispatch()
+
+    //!register/login korar por refresh korle oita chole jay. ai problem solve korar jonno
+    const user= JSON.parse(localStorage.getItem("ecommerceProfile"))
+    useEffect(() => {
+      dispatch(setUser(user))
+      
+    }, [dispatch, user])
+  
+    console.log("app",user)
 
   return (
     <>

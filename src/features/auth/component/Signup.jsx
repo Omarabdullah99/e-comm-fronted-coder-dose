@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function Signup() {
   const dispatch=useDispatch()
   const loginuser=useSelector(selectedLoggedInUser)
+  console.log('signup loginuser',loginuser)
 
 const {register, handleSubmit, formState:{errors}} =useForm()
 // console.log('signup loginuser', loginuser)

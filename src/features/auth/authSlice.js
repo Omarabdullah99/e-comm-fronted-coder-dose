@@ -61,6 +61,18 @@ export const signOutAsync = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'auth',
     initialState,
+    reducers:{
+      //!register/login korar por refresh korle oita chole jay. ai problem solve korar jonno
+      setUser:(state,action)=>{
+        state.loggedInUser=action.payload
+      },
+
+      //!logout action
+      setLogout: (state, action) => {
+        localStorage.clear()
+        state.loggedInUser = null;
+      },
+    },
     extraReducers: (builder) => {
         builder
         .addCase(createUserAsync.pending, (state) => {
@@ -68,13 +80,16 @@ export const userSlice = createSlice({
           })
           .addCase(createUserAsync.fulfilled, (state,action)=>{
             state.status='fullfiled'
+            localStorage.setItem('ecommerceProfile', JSON.stringify({ ...action.payload }));
             state.loggedInUser= action.payload
+            console.log("action for signup",action.payload)
           })
           .addCase(checkUserAsync.pending, (state)=>{
             state.status='loading'
           })
           .addCase(checkUserAsync.fulfilled, (state, action)=>{
             state.status='fullfiled'
+            localStorage.setItem('ecommerceProfile', JSON.stringify({ ...action.payload }));
             state.loggedInUser= action.payload
           })
           .addCase(checkUserAsync.rejected, (state,action)=>{
@@ -111,6 +126,7 @@ export const userSlice = createSlice({
   export const selectedLoggedInUser=(state)=> state.auth.loggedInUser
   export const selectedUserDetails=(state)=> state.auth.userByIdDetails
   export const selectError=(state)=> state.auth.error
+  export const {setUser,setLogout}= userSlice.actions
   export default userSlice.reducer;
   
 

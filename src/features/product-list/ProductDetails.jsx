@@ -8,7 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import { selectedLoggedInUser } from "../auth/authSlice";
 import { createCartByAsync, selectedCartItemByUserId } from "../cart/cartSlice";
 import { discountedPrice } from "../../app/constants";
-import { useAlert } from "react-alert";
+import { toast } from 'react-toastify';
 import Footer from "../common/Footer";
 import { Grid, TailSpin } from "react-loader-spinner";
 
@@ -81,10 +81,10 @@ const ProductDetails = () => {
     if (selectedCardByUserId.findIndex((item) => item.product.id === product.id) < 0) {
       dispatch(createCartByAsync({ product:product.id, quantity: 1, user: user?.user?.id }));
       //this message will provide backend
-      alert.show("Cart Add Successfully!");
+      toast.success("Cart Add Successfully!"); // সফল ম্যাসেজ
     } else {
       //this message will provide backend
-      alert.error("This item already added!");
+      toast.error("This item already added!");
     }
   };
 

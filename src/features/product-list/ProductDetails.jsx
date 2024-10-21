@@ -44,7 +44,6 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const params = useParams();
   const dispatch = useDispatch();
-  const alert = useAlert();
   const user = useSelector(selectedLoggedInUser);
   // console.log('details user',user)
   useEffect(() => {

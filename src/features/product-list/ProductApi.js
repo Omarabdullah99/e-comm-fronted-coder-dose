@@ -13,6 +13,7 @@ export function createProduct(product) {
       method: "POST",
       body: JSON.stringify(product),
       headers: { "content-type": "application/json" },
+      mode:'cors'
     });
     const data = await response.json();
     resolve({ data });
@@ -28,6 +29,7 @@ export function updateProduct(update) {
         method: "PATCH",
         body: JSON.stringify(update),
         headers: { "content-type": "application/json" },
+        mode:'cors'
       }
     );
     const data= await response.json()
@@ -41,7 +43,9 @@ export function fetchProductById(productId) {
   return new Promise(async (resolve) => {
     const id = productId;
 
-    const respose = await fetch("https://e-comm-backend-coder-dose.onrender.com/products/" + id);
+    const respose = await fetch("https://e-comm-backend-coder-dose.onrender.com/products/" + id,{
+      mode:'cors'
+    });
     const data = await respose.json();
 
     resolve({ data });
@@ -76,7 +80,9 @@ export function fetchProductsByFilters(filter, sort,pagination) {
   return new Promise(async (resolve) => {
     //TODO: we will not hard-code server URL here
     const response = await fetch(
-      "https://e-comm-backend-coder-dose.onrender.com/products?" + queryString
+      "https://e-comm-backend-coder-dose.onrender.com/products?" + queryString,{
+        mode:'cors'
+      }
       
     );
     const data = await response.json();
@@ -87,7 +93,9 @@ export function fetchProductsByFilters(filter, sort,pagination) {
 
 export function fetchCategories() {
   return new Promise(async (resolve) => {
-    const response = await fetch("https://e-comm-backend-coder-dose.onrender.com/category");
+    const response = await fetch("https://e-comm-backend-coder-dose.onrender.com/category",{
+      mode:'cors'
+    });
     const data = await response.json();
     resolve({ data });
   });
@@ -95,7 +103,9 @@ export function fetchCategories() {
 
 export function fetchBrands() {
   return new Promise(async (resolve) => {
-    const response = await fetch("https://e-comm-backend-coder-dose.onrender.com/brands");
+    const response = await fetch("https://e-comm-backend-coder-dose.onrender.com/brands",{
+      mode:'cors'
+    });
     const data = await response.json();
     resolve({ data });
   });

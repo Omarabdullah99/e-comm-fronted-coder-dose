@@ -14,6 +14,7 @@ export function createUser(userData) {
                   'Content-Type': 'application/json',
                   ...(token && { 'Authorization': `Bearer ${token}` }) // টোকেন যোগ করা হচ্ছে
               },
+              mode:'cors'
           });
 
           const data = await response.json();
@@ -45,6 +46,7 @@ export function checkUser(loginInfo) {
                   'Content-Type': 'application/json',
                   ...(token && { 'Authorization': `Bearer ${token}` }) // টোকেন যোগ করা হচ্ছে
               },
+              mode:'cors'
           });
 
           const data = await response.json();
@@ -62,7 +64,9 @@ export function checkUser(loginInfo) {
 
 export function fetchUserById(userId){
   return new Promise(async(resolve)=>{
-    const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/user/'+userId)
+    const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/user/'+userId,{
+      mode:'cors'
+    })
     const data= await response.json()
     resolve({data})
   })
@@ -74,6 +78,7 @@ export function updateUser(update){
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },
+      mode:'cors'
     })
     const data= await response.json()
     resolve({data})

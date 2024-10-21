@@ -4,6 +4,7 @@ export function createOrders(order){
             method:"POST",
             body:JSON.stringify(order),
             headers: { 'content-type': 'application/json' },
+            mode:'cors'
         })
         const data= await response.json()
         // console.log('data of order api', data)
@@ -18,6 +19,7 @@ export function updateOrder(order){
             method:"PATCH",
             body:JSON.stringify(order),
             headers: { 'content-type': 'application/json' },
+            mode:'cors'
         })
         const data= await response.json()
         // console.log('data of order api', data)
@@ -33,7 +35,9 @@ export function fetchAllOrders(pagination){
         queryString += `${key}=${pagination[key]}&`
     }
     return new Promise(async(resolve)=>{
-        const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/order?' + queryString)
+        const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/order?' + queryString,{
+            mode:'cors'
+        })
         const data= await response.json()
         const totalItems= await response.headers.get('X-Total-Count')
         resolve({data:{orders:data, totalItems: +totalItems}})

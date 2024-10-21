@@ -5,6 +5,7 @@ export function createCart(cartItem){
             method: 'POST',
             body: JSON.stringify(cartItem),
             headers: { 'content-type': 'application/json' },
+            mode:'cors'
         })
         const data= await response.json()
         resolve({data})
@@ -15,7 +16,9 @@ export function createCart(cartItem){
 export function getCartItemByUserId(userId){
     return new Promise(async(resolve)=>{
         const id= userId
-        const respose= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart?user=' +id)
+        const respose= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart?user=' +id,{
+            mode:'cors'
+        })
         const data= await respose.json()
         resolve({data})
 
@@ -30,7 +33,8 @@ export function updateCartItem(update){
         const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart/'+update.id,{
             method: 'PATCH',
             body: JSON.stringify(update),
-            headers: {'content-type': 'application/json'}
+            headers: {'content-type': 'application/json'},
+            mode:'cors'
         })
         const data= await response.json()
         resolve({data})

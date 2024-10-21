@@ -7,7 +7,7 @@ export function createUser(userData) {
               ? JSON.parse(localStorage.getItem('ecommerceProfile')).token 
               : null;
 
-          const response = await fetch('https://e-comm-backend-coder-dose.vercel.app/auth/signup', {
+          const response = await fetch('https://e-comm-backend-coder-dose.onrender.com/auth/signup', {
               method: 'POST',
               body: JSON.stringify(userData),
               headers: { 
@@ -38,7 +38,7 @@ export function checkUser(loginInfo) {
               ? JSON.parse(localStorage.getItem('ecommerceProfile')).token 
               : null;
 
-          const response = await fetch('https://e-comm-backend-coder-dose.vercel.app/auth/login', {
+          const response = await fetch('https://e-comm-backend-coder-dose.onrender.com/auth/login', {
               method: 'POST',
               body: JSON.stringify(loginInfo),
               headers: { 
@@ -62,7 +62,7 @@ export function checkUser(loginInfo) {
 
 export function fetchUserById(userId){
   return new Promise(async(resolve)=>{
-    const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/user/'+userId)
+    const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/user/'+userId)
     const data= await response.json()
     resolve({data})
   })
@@ -70,7 +70,7 @@ export function fetchUserById(userId){
 export function updateUser(update){
   // console.log('auth api update user',update)
   return new Promise(async(resolve)=>{
-    const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/user/'+update.id,{
+    const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/user/'+update.id,{
       method: 'PATCH',
       body: JSON.stringify(update),
       headers: { 'content-type': 'application/json' },

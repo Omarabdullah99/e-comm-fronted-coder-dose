@@ -1,7 +1,7 @@
 export function createCart(cartItem){
     console.log('api cartitem check', cartItem)
     return new Promise(async(resolve)=>{
-        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/cart',{
+        const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart',{
             method: 'POST',
             body: JSON.stringify(cartItem),
             headers: { 'content-type': 'application/json' },
@@ -15,7 +15,7 @@ export function createCart(cartItem){
 export function getCartItemByUserId(userId){
     return new Promise(async(resolve)=>{
         const id= userId
-        const respose= await fetch('https://e-comm-backend-coder-dose.vercel.app/cart?user=' +id)
+        const respose= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart?user=' +id)
         const data= await respose.json()
         resolve({data})
 
@@ -27,7 +27,7 @@ export function updateCartItem(update){
     // console.log('cart api update', update)
     return new Promise(async(resolve)=>{
         // console.log('update item api', update)
-        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/cart/'+update.id,{
+        const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart/'+update.id,{
             method: 'PATCH',
             body: JSON.stringify(update),
             headers: {'content-type': 'application/json'}
@@ -39,7 +39,7 @@ export function updateCartItem(update){
 
 export function deleteCart(itemid){
     return new Promise(async(resolve)=>{
-        const response= await fetch('https://e-comm-backend-coder-dose.vercel.app/cart/'+itemid,{
+        const response= await fetch('https://e-comm-backend-coder-dose.onrender.com/cart/'+itemid,{
             method: 'DELETE',
             headers: {'content-type': 'application/json'}
         })
